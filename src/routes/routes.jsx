@@ -98,10 +98,10 @@ export const pages = [
   path:"basicdetails/addCompany",
   element:<AddCompany/>
 },
-{
-  path:"basicdetails/adddesignation",
-  element: <AddDesignation/>
-},
+// {
+//   path:"basicdetails/adddesignation",
+//   element: <AddDesignation/>
+// },
 
       {
         path: "trainer",
