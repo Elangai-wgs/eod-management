@@ -1,23 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
-import {
-  Modal,
-  Form,
-  Input,
-  Select,
-  Button,
-  DatePicker,
-  Upload,
-  message,
-} from "antd";
+import {Modal,  Form,  Input, Select,  Button,  DatePicker,  Upload,  message,} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import {
-  AddStaffs,
-  AllStaffs,
-  DeleteStaffs,
-  EditStaffs,
-} from "../../../../services";
+import {  AddStaffs,  AllStaffs,  DeleteStaffs,  EditStaffs,  GetCompany,  GetDeparment,  GetDesignation,  GetRole,} from "../../../../services";
 import dayjs from "dayjs";
 
 const { Option } = Select;
@@ -28,26 +14,37 @@ const Staffs = () => {
   const [form] = Form.useForm();
   const [showIsTrainer, setShowIsTrainer] = useState(false);
   const [staffs, setStaffs] = useState([]);
-  const [isCardModalVisible, setIsCardModalVisible] = useState(false);
+  const[role,setRole]= useState([])
+const[department,setDepartment]=useState([]);
+const[designation, setDesignation]=useState([]);
+const[company,setCompany]=useState([]);
+const [isCardModalVisible, setIsCardModalVisible] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [editModal, SetEditModal] = useState(false);
   const [editStaff, SetEditStaff] = useState({
     id: "",
+staffId:"",
+personalEmail: "",
+professionalEmail:"",
+permanentAddress:"",
+currentAddress:"",
+doj:"",
+company_id:"",
     fullName: "",
-    email: "",
+   
     gender: "",
     phoneNumber: "",
     address: "",
-    designation: "",
+    designation_id: "",
     qualification: "",
     dob: "",
     experience: "",
-    department: "",
+    department_id: "",
     hybrid: "",
     role: "",
     password: "",
     profilePic: "",
-    isTrainer: "",
+    isTrainer: false,
   });
 
   useEffect(() => {
@@ -65,6 +62,66 @@ const Staffs = () => {
 
     fetchStaffData();
   }, []);
+
+  useEffect(() => {
+    const fetchCompany = () => {
+      GetCompany()
+        .then((res) => {
+          setCompany(res.data.data);
+          console.log(res.data.data);
+        })
+        .catch((error) => {
+          message.error("Error fetching staff data. Please try again.");
+          console.error("Error fetching staff data:", error.message);
+        });
+    };
+
+    fetchCompany();
+  }, []);
+
+
+useEffect(()=>{
+  const fetchRole= ()=>{
+    GetRole()
+    .then((res) => {
+      const role = res.data.data; 
+      setRole(role);
+      console.log(role, "gopi");
+    }).catch((err) => {
+      console.log("Error fetching staff data:", err.message);
+    });
+   
+  }
+  fetchRole();
+},[])
+useEffect(()=>{
+  const fetchDesignation= ()=>{
+    GetDesignation()
+    .then((res) => {
+     
+      setDesignation(res.data.data);
+      console.log(res.data.data);
+      
+    }).catch((err) => {
+      console.log("Error fetching staff data:", err.message);
+    });
+   
+  }
+  fetchDesignation();
+},[])
+
+useEffect(()=>{
+  const fetchDepartment =()=>{
+    GetDeparment()
+    .then((res) => {
+      setDepartment(res.data.data)
+      console.log(res.data.data,"nandan");
+    }).catch((err) => {
+      console.log("error",err);
+    });
+  }
+  fetchDepartment();
+},[])
 
   const handleOpenModal = () => {
     setIsModalVisible(true);
@@ -89,17 +146,23 @@ const Staffs = () => {
   };
 
   const handleAddStaff = async (values) => {
+    console.log(values,"values")
     const formData = new FormData();
+    formData.append("staffId",values.staffId)
     formData.append("fullName", values.fullName);
-    formData.append("email", values.email);
+    formData.append("personalEmail", values.personalEmail);
+    formData.append("professionalEmail", values.professionalEmail);
     formData.append("gender", values.gender);
     formData.append("phoneNumber", values.phoneNumber);
-    formData.append("address", values.address);
+    formData.append("permanentAddress", values.permanentAddress);
+    formData.append("currentAddress", values.currentAddress);
     formData.append("designation", values.designation);
     formData.append("qualification", values.qualification);
     formData.append("dob", values.dob);
+    formData.append("doj", values.doj);
+    formData.append("company_id",values.company)
     formData.append("experience", values.experience);
-    formData.append("department", values.department);
+    formData.append("department_id", values.department);
     formData.append("hybrid", values.hybrid);
     formData.append("role", values.role);
     formData.append("password", values.password);
@@ -135,17 +198,22 @@ const Staffs = () => {
     SetEditModal(true);
     SetEditStaff({
       id: staff._id,
+      staffId: staff.staffId,
+
       fullName: staff.fullName,
-      email: staff.email,
       gender: staff.gender,
+      personalEmail: staff.personalEmail,
+      professionalEmail: staff.professionalEmail,
       phoneNumber: staff.phoneNumber,
       address: staff.address,
-      designation: staff.designation,
+      designation_id: staff.designation,
       qualification: staff.qualification,
       dob: staff.dob,
+      doj: staff.doj,
       experience: staff.experience,
-      department: staff.department,
+      department_id: staff.department,
       hybrid: staff.hybrid,
+      company_id:staff.company,
       role: staff.role,
       password: staff.password,
     });
@@ -296,7 +364,7 @@ const Staffs = () => {
                 <h2 className="text-lg font-semibold text-gray-800">
                   Name: {staff.fullName}
                 </h2>
-                <p className="text-gray-600">Position: {staff.role}</p>
+                <p className="text-gray-600">Position: {staff.roleName}</p>
               </div>
             </div>
           ))
@@ -309,7 +377,7 @@ const Staffs = () => {
 
       <Modal
         title="Add New Staff"
-        visible={isModalVisible}
+        open={isModalVisible}
         onCancel={handleCloseModal}
         footer={null}
         centered
@@ -321,6 +389,14 @@ const Staffs = () => {
           className="grid grid-cols-1 md:grid-cols-2 md:gap-x-4"
         >
           <Form.Item
+            label="Staff ID"
+            name="staffId"
+            rules={[{ required: true, message: "Please enter the StaffId" }]}
+            className="col-span-1"
+          >
+            <Input className="w-full" />
+          </Form.Item>
+          <Form.Item
             label="Full Name"
             name="fullName"
             rules={[{ required: true, message: "Please enter full name" }]}
@@ -330,8 +406,17 @@ const Staffs = () => {
           </Form.Item>
 
           <Form.Item
-            label="Email"
-            name="email"
+            label="Personal Email"
+            name="personalEmail"
+            rules={[{ type: "email", message: "Please enter a valid email" }]}
+            className="col-span-1"
+          >
+            <Input className="w-full" />
+          </Form.Item>
+
+          <Form.Item
+            label="Professional Email"
+            name="professionalEmail"
             rules={[{ type: "email", message: "Please enter a valid email" }]}
             className="col-span-1"
           >
@@ -369,30 +454,34 @@ const Staffs = () => {
             <Input className="w-full" />
           </Form.Item>
 
-          <Form.Item label="Address" name="address" className="col-span-1">
+          <Form.Item label="Permanent Address" name="permanentAddress" className="col-span-1">
             <Input className="w-full" />
           </Form.Item>
-
-          <Form.Item
-            label="Designation"
-            name="designation"
-            className="col-span-1"
-          >
+          <Form.Item label="Current Address" name="currentAddress" className="col-span-1">
             <Input className="w-full" />
           </Form.Item>
-
+<Form.Item label="Designation" name="designation">
+          <Select placeholder="Select a designation">
+          {designation.map((desg) => (
+            <Option key={desg.id} value={desg._id}>
+              {desg.title}
+            </Option>
+          ))}
+        </Select>
+        </Form.Item>
           <Form.Item
             label="Role"
             name="role"
             rules={[{ required: true, message: "Please select role" }]}
             className="col-span-1"
           >
-            <Select className="w-full" onChange={handleRoleChange}>
-              <Option value="Admin">Admin</Option>
-              <Option value="HR">HR</Option>
-              <Option value="Coordinator">Coordinator</Option>
-              <Option value="Employee">Employee</Option>
-            </Select>
+           <Select className="w-full" onChange={handleRoleChange}>
+      {role.map((role) => (
+        <Option key={role.id} value={role._id}>
+          {role.roleName}
+        </Option>
+      ))}
+    </Select>
           </Form.Item>
 
           <Form.Item
@@ -421,14 +510,31 @@ const Staffs = () => {
             />
           </Form.Item>
           <Form.Item
+            label="Date of Join"
+            name="doj"
+            rules={[{ required: true, message: "Please select date of Join" }]}
+            className="col-span-1"
+          >
+            <DatePicker
+              className="w-full"
+              format="DD-MM-YYYY"
+              onChange={(date) => {
+                if (date) {
+                  const formattedDate = dayjs(date).format("DD-MM-YYYY");
+                  console.log("Formatted Date of Birth:", formattedDate);
+                }
+              }}
+            />
+          </Form.Item>
+          <Form.Item
             label="Experience"
             name="experience"
             className="col-span-1"
           >
             <Select className="w-full">
-              <Option value="0 to 1">0 to 1</Option>
-              <Option value="1 to 3">1 to 3</Option>
-              <Option value="3 to 5">3 to 5</Option>
+              <Option value="0 to 1 year">0 to 1</Option>
+              <Option value="1 to 3 years">1 to 3</Option>
+              <Option value="3 to 5 years">3 to 5</Option>
               <Option value="5+">5+</Option>
             </Select>
           </Form.Item>
@@ -437,14 +543,30 @@ const Staffs = () => {
             name="department"
             className="col-span-1"
           >
-            <Select className="w-full">
-              <Option value="DEV-Team">DEV-Team</Option>
-              <Option value="DM-Team">DM-Team</Option>
-              <Option value="SALES-Team">SALES-Team</Option>
-              <Option value="MARKETING-Team">MARKETING-Team</Option>
-              <Option value="PLACEMENT-Team">PLACEMENT-Team</Option>
-            </Select>
+             <Select placeholder="Select a department" className="w-full">
+      {department.map((department) => (
+        <Option key={department._id } value={department._id}>
+        {department.name}
+      </Option>
+      ))}
+    </Select>
           </Form.Item>
+          <Form.Item
+            label="Company"
+            name="company"
+            className="col-span-1"
+          >
+             <Select placeholder="Select a Company" className="w-full">
+      {company.map((companies) => (
+        <Option key={companies.id } value={companies._id}>
+        {companies.companyName}
+      </Option>
+      ))}
+    </Select>
+          </Form.Item>
+
+
+
 
           <Form.Item
             label="Hybrid"
@@ -480,6 +602,7 @@ const Staffs = () => {
             <Form.Item
               label="IsTrainer"
               name="isTrainer"
+              initialValue={false}
               rules={[{ required: true, message: "Please select yes or no" }]}
               className="col-span-1"
             >
@@ -579,6 +702,21 @@ const Staffs = () => {
             onFinish={handleEditStaff}
             className="grid grid-cols-1 md:grid-cols-2 md:gap-x-4"
           >
+
+
+<Form.Item
+            label="Staff ID"
+            name="staffId"
+            rules={[{ required: true, message: "Please enter the StaffId" }]}
+            className="col-span-1"
+          >
+            <Input className="w-full" 
+            value={editStaff.staffId}
+            onChange={(e) =>
+                  SetEditStaff({ ...editStaff, staffId: e.target.value })
+                }/>
+          </Form.Item>
+            
             <Form.Item
               label="Full Name"
               // name="fullName"
@@ -595,38 +733,32 @@ const Staffs = () => {
             </Form.Item>
 
             <Form.Item
-              label="Email"
-              // name="email"
-              rules={[{ type: "email", message: "Please enter a valid email" }]}
-              className="col-span-1"
-            >
-              <Input
-                className="w-full"
-                value={editStaff.email}
-                onChange={(e) =>
-                  SetEditStaff({ ...editStaff, email: e.target.value })
-                }
-              />
-            </Form.Item>
-
-            {/* <Form.Item
-              label="Password"
-              // name="password"
-              rules={[{ required: true, message: "Please enter password" }]}
-              className="col-span-1"
-            >
-              <Input.Password
-                className="w-full"
-                value={editStaff.password}
-                onChange={(e) =>
-                  SetEditStaff({ ...editStaff, password: e.target.value })
-                }
-              />
-            </Form.Item> */}
+            label="Personal Email"
+            name="personalEmail"
+            rules={[{ type: "email", message: "Please enter a valid email" }]}
+            className="col-span-1"
+          >
+            <Input className="w-full"  value={editStaff.personalEmail}
+            onChange={(e) =>
+                  SetEditStaff({ ...editStaff, personalEmail: e.target.value })
+                } />
+          </Form.Item>
 
             <Form.Item
-              label="Gender"
-              // name="gender"
+            label="Professional Email"
+            name="professionalEmail"
+            rules={[{ type: "email", message: "Please enter a valid email" }]}
+            className="col-span-1"
+          >
+            <Input className="w-full"  value={editStaff.professionalEmail}
+            onChange={(e) =>
+                  SetEditStaff({ ...editStaff, professionalEmail: e.target.value })
+                } />
+          </Form.Item>
+
+            
+            <Form.Item label="Gender"               
+            // name="gender"
               rules={[{ required: true, message: "Please select gender" }]}
               className="col-span-1"
             >
@@ -659,33 +791,45 @@ const Staffs = () => {
             </Form.Item>
 
             <Form.Item
-              label="Address"
+              label="Permanent Address"
               // name="address"
               className="col-span-1"
             >
               <Input
                 className="w-full"
-                value={editStaff.address}
+                value={editStaff.permanentAddress}
                 onChange={(e) =>
-                  SetEditStaff({ ...editStaff, address: e.target.value })
+                  SetEditStaff({ ...editStaff, permanentAddress: e.target.value })
+                }
+              />
+            </Form.Item>
+            <Form.Item
+              label="Current Address"
+              // name="address"
+              className="col-span-1"
+            >
+              <Input
+                className="w-full"
+                value={editStaff.currentAddress}
+                onChange={(e) =>
+                  SetEditStaff({ ...editStaff, currentAddress: e.target.value })
                 }
               />
             </Form.Item>
 
             <Form.Item
               label="Designation"
-              // name="designation"
+              name="designation"
               className="col-span-1"
             >
               <Input
                 className="w-full"
-                value={editStaff.designation}
+                value={editStaff.designation_id}
                 onChange={(e) =>
-                  SetEditStaff({ ...editStaff, designation: e.target.value })
+                  SetEditStaff({ ...editStaff, designation_id: e.target.value })
                 }
               />
             </Form.Item>
-
             <Form.Item
               label="Role"
               // name="role"
@@ -701,10 +845,11 @@ const Staffs = () => {
                   SetEditStaff({ ...editStaff, role: value });
                 }}
               >
-                <Option value="Admin">Admin</Option>
-                <Option value="HR">HR</Option>
-                <Option value="Coordinator">Coordinator</Option>
-                <Option value="Employee">Employee</Option>
+                  {role.map((role) => (
+        <Option key={role.id} value={role._id}>
+          {role.roleName}
+        </Option>
+      ))}
               </Select>
             </Form.Item>
 
@@ -816,7 +961,6 @@ const Staffs = () => {
                 </Button>
               </Upload>
             </Form.Item>
-
             <Form.Item className="col-span-2">
               <button  htmlType="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white py-1 rounded-md">
                 Add Staff
@@ -828,5 +972,4 @@ const Staffs = () => {
     </div>
   );
 };
-
 export default Staffs;

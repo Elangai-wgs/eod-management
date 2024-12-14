@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import logo from "../assets/Login/LoginImage.jpg";
 import img1 from "../assets/Login/BrowserLogo.png";
 import { useNavigate } from "react-router-dom";
-import {  login } from "../services";
+import { login } from "../services";
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const [authorityLevel, setAuthorityLevel] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -16,12 +17,11 @@ const Login = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
         const { latitude, longitude } = position.coords;
-        
 
         const loginData = {
           email,
           password,
-          role,
+          authorityLevel,
           latitude,
           longitude,
         };
@@ -34,20 +34,18 @@ const Login = () => {
 
             if (response.data.status === true) {
               localStorage.setItem("authToken", response.data.data.token);
-              const role = response.data.data.role.roleName
+              const authorityLevel = response.data.data?.role.authorityLevel;
               setEmail("");
               setPassword("");
-              setRole(role);  
-console.log(response, "goip");
-              console.log("User Role:", role);
+              setAuthorityLevel(authorityLevel);
+              console.log("User Role:", authorityLevel);
 
-              if (role === "superAdmin") {
+              // Navigate based on authority level
+              if (authorityLevel === "High") {
                 navigate("/sidebar/dashboard");
-              } else if (role === "Admin") {
+              } else if (authorityLevel === "Medium") {
                 navigate("/admin");
-              } else if (role === "Employee") {
-                navigate("/trainersidebar/dashboard");
-              } else if (role === "Trainee") {
+              } else if (authorityLevel === "Low") {
                 navigate("/traineesidebar/dashboard");
               } else {
                 navigate("/");
@@ -58,29 +56,21 @@ console.log(response, "goip");
           })
           .catch((error) => {
             console.error("Login failed:", error);
-            alert(error.response.data.message);
+            alert(error.response.data.message || "Login failed");
           });
       },
-
       (error) => {
         console.error("Failed to fetch location:", error);
-        alert("alert ta iru");
+        alert("Unable to retrieve location");
       },
       {
-        enableHighAccuracy: true, 
-            
+        enableHighAccuracy: true,
       }
     );
   };
 
- 
-
- 
-
- 
-
   return (
-    <div className="h-screen flex justify-center">
+    <div className="h-screen flex justify-center items-center bg-gray-100">
       <div className="flex w-full justify-center items-center gap-12">
         <img src={logo} alt="Login Logo" className="rounded-3xl" width={450} />
         <div className="flex flex-col justify-center items-center space-y-1">
@@ -109,21 +99,8 @@ console.log(response, "goip");
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              {/* <select
-                className="border-orange-200 border-b-2 mt-2 outline-none p-1 bg-white"
-                value={role}
-                onChange={(e) => setRole(e.target.value)}
-              >
-                <option value="" disabled>
-                  Select Role
-                </option>
-                <option value="SuperAdmin">Super Admin</option>
-                <option value="Admin">Admin</option>
-                <option value="Employee">Employee</option>
-                <option value="Trainee">Trainee</option>
-              </select> */}
             </div>
-            <div className="text-center ">
+            <div className="text-center">
               <button
                 type="submit"
                 className="py-1 px-3 mt-9 bg-orange-400 font-bold text-white rounded-md hover:bg-orange-500 transition"
@@ -132,10 +109,8 @@ console.log(response, "goip");
               </button>
             </div>
           </form>
-         
         </div>
       </div>
-    
     </div>
   );
 };

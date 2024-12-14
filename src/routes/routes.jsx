@@ -54,6 +54,7 @@ import AddRole from "../Panel/SuperAdmin/Pages/BasicDetails/AddRole";
 import AddCompany from "../Panel/SuperAdmin/Pages/BasicDetails/AddCompany";
 import SalaryConfig from "../Panel/SuperAdmin/Pages/SalaryConfig/SalaryConfig";
 import Payroll from "../Panel/SuperAdmin/Pages/Payroll/Payroll";
+import AddDesignation from "../Panel/SuperAdmin/Pages/BasicDetails/AddDesignation";
 
 
 // export default pages;
@@ -96,6 +97,10 @@ export const pages = [
 {
   path:"basicdetails/addCompany",
   element:<AddCompany/>
+},
+{
+  path:"basicdetails/adddesignation",
+  element: <AddDesignation/>
 },
 
       {

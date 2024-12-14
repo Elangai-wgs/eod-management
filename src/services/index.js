@@ -395,3 +395,30 @@ return res;
   const res = await interceptors.get(`/pay-slip?m=${m}&y=${y}`);
   return res;
  }
+
+ 
+// Department
+
+export const CreateDepartment=async (data)=>{
+  const res =await interceptors.post('/department/create',data)
+return res;
+}
+
+ export const GetDeparment= async()=>{
+  const res = await interceptors.get('/department/get-all')
+return res; 
+}
+
+
+//Designation
+
+export const CreateDesignation =async(data)=>{
+  const res = await interceptors.post('/designation/create',data)
+  return res;
+}
+
+export const GetDesignation = async()=>{
+  const res = await interceptors.get('/designation/get-all')
+  return res;
+}
+
