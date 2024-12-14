@@ -13,10 +13,7 @@ const jwt = require('jsonwebtoken');
 
 exports.loginByEmailAndLogId = async(req)=>{
     const { email, password, latitude,longitude,} = req.body
-    const user = await Auth.findOne({email}).populate({
-      path:'role',
-      select:'roleName'
-    });
+    const user = await Auth.findOne({email}).populate('role');
     if (!user) {
         throw new ApiError(status.UNAUTHORIZED, {message:"Invalid credantials",status:false,});
       }
