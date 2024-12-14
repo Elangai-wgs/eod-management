@@ -45,20 +45,20 @@ const io = socketIo(server,{
 socketRoute(io);
 
 app.use((req, res, next) => {
-    req.io = io;
+    // req.io = io;
     next();
   });
 
-  io.on("connection", (socket) => {
-    const userId = socket.handshake.query.userId;
-    if (userId) {
-        req.io.connectedUsers[userId] = socket.id;
-    }
+//   io.on("connection", (socket) => {
+//     const userId = socket.handshake.query.userId;
+//     if (userId) {
+//         req.io.connectedUsers[userId] = socket.id;
+//     }
 
-    socket.on("disconnect", () => {
-        delete req.io.connectedUsers[userId];
-    });
-});
+//     socket.on("disconnect", () => {
+//         delete req.io.connectedUsers[userId];
+//     });
+// });
 
 
 app.get("/",(req, res)=>{
