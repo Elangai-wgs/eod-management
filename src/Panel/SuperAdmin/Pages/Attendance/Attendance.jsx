@@ -62,8 +62,9 @@ const Attendance = () => {
     const matchesSearch = item.user?.fullName
       ?.toLowerCase()
       .includes(searchQuery.toLowerCase());
-    const matchesDate = selectedDate
-      ? new Date(item.date).toISOString().split("T")[0] === selectedDate
+      const matchesDate = selectedDate
+      ? item.date && !isNaN(new Date(item.date).getTime()) && 
+        new Date(item.date).toISOString().split("T")[0] === selectedDate
       : true;
     const matchesRole = selectedRole ? item.user?.role === selectedRole : true;
     return matchesSearch && matchesDate && matchesRole;

@@ -914,7 +914,7 @@ useEffect(()=>{
             className="col-span-1"
           >
             <Select className="w-full"
-             value={editStaff.department}
+             value={editStaff.department_id}
              onChange={(value)=> SetEditStaff({...editStaff, department: value})}
              >
               <Option value="DEV-Team">DEV-Team</Option>

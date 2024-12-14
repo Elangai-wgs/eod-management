@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
-import { GetInitialPayrollData, GetLeaveDetails, GetPaySlipDetails } from "../../../../services";
+import { downloadPaySlip, GetInitialPayrollData, GetLeaveDetails, GetPaySlipDetails } from "../../../../services";
+import { useNavigate } from "react-router-dom";
 
 const LeaveDetailLoading = () => {
   return (
@@ -114,6 +115,7 @@ const PayslipLoading = () => {
 };
 
 const Payroll = () => {
+  const navigate = useNavigate();
   const { RangePicker, MonthPicker } = DatePicker;
   const todayDate = new Date();
 
@@ -246,8 +248,10 @@ const Payroll = () => {
     totalCompOff: 10,
   };
 
-  const handelDownloadPaySlip = () => {
-    console.log("download clicked");
+  const handelDownloadPaySlip = async() => {
+    window.open(`http://localhost:8010/v1/pay-slip/download?uid=f16430c9-dbbd-4d4a-9fee-ba415ede3abc&m=11&y=2024`,'_blank')
+    // navigate(`http://localhost:8010//v1/pay-slip/download?uid=f16430c9-dbbd-4d4a-9fee-ba415ede3abc&m=11&y=2024`)
+    // const response = await downloadPaySlip("f16430c9-dbbd-4d4a-9fee-ba415ede3abc",11,2024)
   };
 
   const handelInitialFetch = async () => {
