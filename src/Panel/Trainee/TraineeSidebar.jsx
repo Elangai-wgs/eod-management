@@ -78,6 +78,12 @@ const TraineeSidebar = () => {
             <FaUserGraduate size={24}/>
             Assessment
           </Link>
+          <Link 
+            to="/traineesidebar/traineeEod" 
+            className="flex items-center gap-4 px-4 text-lg font-semibold py-2 rounded-md text-white hover:bg-white hover:text-orange-600 transition-all duration-200">
+            <GiNotebook size={24}/>
+            Eod
+          </Link>
           {/* <Link 
             to="/traineesidebar/attendance" 
             className="flex items-center gap-4 px-4 text-lg font-semibold py-2 rounded-md text-white hover:bg-white hover:text-orange-600 transition-all duration-200">

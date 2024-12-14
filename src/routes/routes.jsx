@@ -56,6 +56,7 @@ import SalaryConfig from "../Panel/SuperAdmin/Pages/SalaryConfig/SalaryConfig";
 import Payroll from "../Panel/SuperAdmin/Pages/Payroll/Payroll";
 import Leave from "../Panel/SuperAdmin/Pages/Leave/Leave"
 import AddDesignation from "../Panel/SuperAdmin/Pages/BasicDetails/AddDesignation";
+import TraineeEod from "../Panel/Trainee/Pages/Eod/Eod";
 
 
 // export default pages;
@@ -190,6 +191,10 @@ export const pages = [
       {
         path: "attendance",
         element: <Attendance />,
+      },
+      {
+        path: "traineeEod",
+        element: <TraineeEod />,
       },
       {
         path:"task",

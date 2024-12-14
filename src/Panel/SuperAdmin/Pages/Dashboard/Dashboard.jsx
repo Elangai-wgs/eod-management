@@ -74,7 +74,7 @@ const Dashboard = () => {
   const FetchAttendence = () => {
     GetAttendance()
       .then((res) => {
-        SetAttendence(res.data.data);
+        SetAttendence(res.data.data.filter((item)=>item.date));
       })
       .catch((err) => {
         console.log(err, "error fetching");
@@ -125,7 +125,7 @@ const Dashboard = () => {
 
     data.forEach((entry) => {
       // Extract the date part (YYYY-MM-DD)
-      const date = entry.date.split("T")[0];
+      const date = entry.date?.split("T")[0];
 
       // Increment the count for this date
       counts[date] = (counts[date] || 0) + 1;
