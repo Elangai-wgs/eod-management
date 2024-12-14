@@ -45,7 +45,10 @@ const Login = () => {
                 navigate("/sidebar/dashboard");
               } else if (authorityLevel === "Medium") {
                 navigate("/admin");
-              } else if (authorityLevel === "Low") {
+              } else if (authorityLevel === "medium") {
+                navigate("/trainersidebar/dashboard");
+              } 
+              else if (authorityLevel === "Low") {
                 navigate("/traineesidebar/dashboard");
               } else {
                 navigate("/");
