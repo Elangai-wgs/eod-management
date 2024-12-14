@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import logo from "../assets/Login/LoginImage.jpg";
 import img1 from "../assets/Login/BrowserLogo.png";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services";
+import { PermissionContext } from "../App";
+
 
 
 const Login = () => {
+  const {permision,setPermission} = useContext(PermissionContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authorityLevel, setAuthorityLevel] = useState("");
@@ -30,11 +33,13 @@ const Login = () => {
 
         login(loginData)
           .then((response) => {
-            console.log("Login Response:", response);
+            console.log("Login Response:", response.data.data?.role);
 
             if (response.data.status === true) {
+
               localStorage.setItem("authToken", response.data.data.token);
               const authorityLevel = response.data.data?.role.authorityLevel;
+              setPermission(response.data.data?.role)
               setEmail("");
               setPassword("");
               setAuthorityLevel(authorityLevel);

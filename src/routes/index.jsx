@@ -6,6 +6,7 @@ import { pages } from "./routes";
 import { Navbar } from "../components/navbar";
 import { Footer } from "../components/footer";
 
+
 const isAllowed = (access = []) => {
   const token = localStorage.getItem("userToken");
   return token || access.includes("open");
