@@ -216,8 +216,8 @@ const Leave = () => {
     data.filter((request) => {
       const dateMatch =
         !dateFilter.length ||
-        (dayjs(request.startDateString, "DD/MM/YYYY").isBetween(dateFilter[0], dateFilter[1], null, "[]") ||
-          dayjs(request.endDateString, "DD/MM/YYYY").isBetween(dateFilter[0], dateFilter[1], null, "[]"));
+        (dayjs(request.startDateString, "DD/MM/YYYY").isAfter(dateFilter[0], null, "[]") ||
+          dayjs(request.endDateString, "DD/MM/YYYY").isBefore(dateFilter[1], null, "[]"));
       const statusMatch = !statusFilter || request.status === statusFilter;
       const typeMatch = !leaveTypeFilter || request.leaveType === leaveTypeFilter;
       return dateMatch && statusMatch && typeMatch;

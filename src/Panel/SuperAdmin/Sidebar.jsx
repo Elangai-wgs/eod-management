@@ -43,7 +43,9 @@ const Navbar = () => {
     "/sidebar/chat": "Chat",
     "/sidebar/schedule": "Schedule",
     "/sidebar/notifications": "Notifications",
-    "/sidebar/config": "Config"
+    "/sidebar/config": "Config",
+    "/sidebar/payroll": "Payroll",
+    "/sidebar/leave": "Leave Requests"
   };
 
   
@@ -421,7 +423,16 @@ const Sidebar = () => {
               } flex items-center gap-4 px-4 py-2 text-lg font-semibold rounded-md transition-all duration-200 `}
             >
               <IoDocument size={24} />
-              Leave
+              Leave Request
+            </Link>
+            <Link
+              to="/sidebar/monthly-payroll"
+              className={`${
+                isActive("/sidebar/monthly-payroll") ? "text-orange-600 bg-white" : ""
+              } flex items-center gap-4 px-4 py-2 text-lg font-semibold rounded-md transition-all duration-200 `}
+            >
+              <IoDocument size={24} />
+              Monthly Payroll
             </Link>
           </div>
         ) : (

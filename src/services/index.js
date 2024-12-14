@@ -396,6 +396,11 @@ return res;
   return res;
  }
 
+ export const downloadPaySlip = async (uid,m,y) => {
+  const res = await interceptors.get(`/pay-slip/download?uid=${uid}&m=${m}&y=${y}`);
+  return res;
+ }
+
 
  // leave approval 
 
@@ -418,3 +423,31 @@ return res;
   const res = await interceptors.put(`/leave/approveLeave/${id}?ap=${status?1:0}`);
   return res;
  }
+
+
+ // monthly pay roll
+ 
+ export const CreateMonthlyPayroll = async (data) => {
+  const [month,year] = data.dateString.split('-');
+  const [payDay] = data.payDate.split('/');
+  const res = await interceptors.post('/monthly-payroll/create', {...data,payDay,month,year});
+  return res;
+}
+
+export const GetMonthlyPayroll = async () => {
+  const res = await interceptors.get('/monthly-payroll/get-all');
+  return res;
+}
+
+export const UpdateMonthlyPayroll = async (id,dataToUpdate) => {
+  const [month,year] = dataToUpdate.dateString.split('-')
+  const [payDay] = dataToUpdate.payDate.split('/');
+  const res = await interceptors.put(`/monthly-payroll/update/${id}`,{...dataToUpdate,payDay,month,year});
+  return res;
+}
+
+export const  DeletePayroll = async (id) => {
+  const res = await interceptors.delete(`/monthly-payroll/delete-h/${id}`);
+  return res;
+}
+
