@@ -11,6 +11,8 @@ const { getData } = require("../config/json.config");
 exports.createMonthlyPayroll = async (req) => {
   let { month, year, noOfWorkingDays, numberOfPaidHolydays,payDay } = req.body;
 
+
+  console.log(month, year, noOfWorkingDays, numberOfPaidHolydays,payDay,"month, year, noOfWorkingDays, numberOfPaidHolydays,payDa")
   let currentDate =new Date();
 
   if (!month || !year) {

@@ -23,6 +23,6 @@ monthlyPayrollRouter.get('/:payrollId', monthlyPayrollController.getMonthlyPayro
 monthlyPayrollRouter.put('/update/:payrollId', monthlyPayrollController.updateMonthlyPayroll);
 
 // Route to delete a monthly payroll
-monthlyPayrollRouter.delete('/delete/:payrollId', monthlyPayrollController.deleteMonthlyPayroll);
+monthlyPayrollRouter.delete('/delete-h/:payrollId', monthlyPayrollController.deleteMonthlyPayroll);
 
 module.exports = { path: '/monthly-payroll', route: monthlyPayrollRouter };
