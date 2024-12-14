@@ -3,9 +3,13 @@ import "./App.css";
 import { Routers } from "./routes";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store";
-import { useEffect } from "react";
+import { createContext, useEffect, useState } from "react";
+
+export const PermissionContext = createContext();
 
 function App() {
+ 
+  const [permision,setPermission] = useState({})
   const location = useLocation();
   const url = location.pathname.split("/");
   const panel = url[1];
@@ -16,9 +20,11 @@ function App() {
   }, []);
   return (
     <>
+    <PermissionContext.Provider value={{permision,setPermission}}>
       <Provider store={store}>
         <Routers />
       </Provider>
+      </PermissionContext.Provider>
     </>
   );
 }
