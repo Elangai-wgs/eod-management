@@ -262,7 +262,7 @@ const Sidebar = () => {
                   Add Company
                 </Link>
                 <Link
-                  to="/sidebar/add-designation"
+                  to="/sidebar/basicdetails/adddesignation"
                   className="block text-lg text-white hover:bg-white hover:text-orange-600 px-4 py-2 rounded-md transition-all duration-200"
                 >
                   Add Designation

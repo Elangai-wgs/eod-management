@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Select, DatePicker, Input, Pagination, message, Modal } from "antd";
 import dayjs from "dayjs";
-import { GetEodAll } from "../../../../services";
+import { GetDeparment, GetEodAll } from "../../../../services";
 
 const { Option } = Select;
 
 const SuperEod = () => {
   const [listEodData, setListEodData] = useState([]);
+  const[department, setDepartment]=useState([]);
   const [filters, setFilters] = useState({
     department: "",
     project: "",
@@ -52,7 +53,20 @@ const SuperEod = () => {
 
   useEffect(() => {
     fetchAllEod();
+    fetchDepartments();
   }, []);
+
+  const fetchDepartments = async () => {
+    try {
+      const response = await GetDeparment(); // Call your department API
+      if (response) {
+        setDepartment(response.data.data);
+        console.log(response.data.data); // Update the state with department data
+      }
+    } catch (error) {
+      message.error("Failed to fetch departments");
+    }
+  };
 
   // Extract unique values for filters
   const uniqueDepartments = [...new Set(listEodData.map((eod) => eod.department))];
@@ -65,7 +79,7 @@ const SuperEod = () => {
   // Handle filter changes
   const handleFilterChange = (field, value) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
-    if (field !== "name") setCurrentPage(1); // Reset pagination when filters change
+    if (field !== "name") setCurrentPage(1); 
   };
 
   // Filter data
@@ -100,9 +114,9 @@ const SuperEod = () => {
           onChange={(value) => handleFilterChange("department", value)}
           allowClear
         >
-          {uniqueDepartments.map((department) => (
-            <Option key={department} value={department}>
-              {department}
+          {department.map((departments) => (
+            <Option key={departments._id} value={departments.name}>
+              {departments.name}
             </Option>
           ))}
         </Select>

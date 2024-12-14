@@ -425,6 +425,7 @@ return res;
  }
 
 
+
  // monthly pay roll
  
  export const CreateMonthlyPayroll = async (data) => {
@@ -451,3 +452,22 @@ export const  DeletePayroll = async (id) => {
   return res;
 }
 
+
+
+ export const CreateDepartment= async(data)=>{
+  const res = await interceptors.post('/department/create',data)
+  return res; 
+ }
+ export const CreateDesignation= async(data)=>{
+  const res = await interceptors.post('/designation/create',data)
+  return res;
+ }
+
+ export const GetDeparment = async ()=>{
+  const res = await interceptors.get('/department/get-all')
+  return res;
+ }
+ export const GetDesignation = async ()=>{
+  const res = await interceptors.get('/designation/get-all')
+  return res;
+ }
