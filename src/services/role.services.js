@@ -13,7 +13,11 @@ exports.createRole = async(req)=>{
     if(!hierarchyLevel){
         throw new ApiError(status.BAD_REQUEST,'Please provide a hierarchy level for role');
     }
-    const createdRole = await RoleModel.create(req.body);
+    const data = {
+        ...req.body,
+        authorityLevel:req.body.authorityLevel[0]
+    }
+    const createdRole = await RoleModel.create(data);
 
     if(!createdRole){
         throw new ApiError(status.INTERNAL_SERVER_ERROR,'Failed to create role');
