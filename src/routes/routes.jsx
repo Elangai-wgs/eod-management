@@ -410,7 +410,7 @@ const routePages = [
                 key:"staff",
                 element: <Staffs/>,
                 path: "staff",
-                access: ["close"],
+                access: ["open"],
               },
               
               {

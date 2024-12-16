@@ -6,4 +6,8 @@
     .btn{
         @apply text-white
     }
+
+    .scroll-bar {
+        @apply  [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300
+    }
 }

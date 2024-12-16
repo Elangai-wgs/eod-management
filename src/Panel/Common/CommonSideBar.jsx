@@ -175,14 +175,12 @@ const CommonSideBar = () => {
     isThisMenuAllowed(menubarData.key)
   );
   return (
-    <div className="flex h-screen">
+    <div className="flex w-full h-screen">
       <div
-        className=" [&::-webkit-scrollbar]:w-1
-      [&::-webkit-scrollbar-track]:bg-gray-100
-      [&::-webkit-scrollbar-thumb]:bg-gray-300 fixed top-0 bg-orange-500 text-white p-4 shadow-lg h-full overflow-y-auto"
+        className="scroll-bar w-full bg-orange-500 text-white p-4 shadow-lg h-full overflow-y-auto"
       >
-        <div className="flex flex-col items-center">
-          <img src={logo} alt="" className="w-16  " />
+        <div className="flex flex-col items-center w-full">
+          <img src={logo} alt="" className="w-16" />
           <h2 className="text-2xl font-semibold mb-8 text-center">
             Why Global Services
           </h2>
