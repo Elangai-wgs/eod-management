@@ -57,7 +57,7 @@ const Routers = () => {
     return (
         <Routes>
             {renderRoutes(routePages)}
-            <Route path="*" element={<PageNotFound />} />
+            <Route path="hello" element={<PageNotFound />} />
         </Routes>
     );
 };
