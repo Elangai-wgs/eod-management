@@ -70,7 +70,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     console.log("out");
-    // try {
+    // try {a
     const res = await logout();
     console.log(res.data);
 

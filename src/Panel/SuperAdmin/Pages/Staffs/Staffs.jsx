@@ -1,9 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
-import {Modal,  Form,  Input, Select,  Button,  DatePicker,  Upload,  message,} from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Select,
+  Button,
+  DatePicker,
+  Upload,
+  message,
+} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import {  AddStaffs,  AllStaffs,  DeleteStaffs,  EditStaffs,  GetCompany,  GetDeparment,  GetDesignation,  GetRole,} from "../../../../services";
+import {
+  AddStaffs,
+  AllStaffs,
+  DeleteStaffs,
+  EditStaffs,
+  GetCompany,
+  GetDeparment,
+  GetDesignation,
+  GetRole,
+} from "../../../../services";
 import dayjs from "dayjs";
 
 const { Option } = Select;
@@ -14,24 +32,24 @@ const Staffs = () => {
   const [form] = Form.useForm();
   const [showIsTrainer, setShowIsTrainer] = useState(false);
   const [staffs, setStaffs] = useState([]);
-  const[role,setRole]= useState([])
-const[department,setDepartment]=useState([]);
-const[designation, setDesignation]=useState([]);
-const[company,setCompany]=useState([]);
-const [isCardModalVisible, setIsCardModalVisible] = useState(false);
+  const [role, setRole] = useState([]);
+  const [department, setDepartment] = useState([]);
+  const [designation, setDesignation] = useState([]);
+  const [company, setCompany] = useState([]);
+  const [isCardModalVisible, setIsCardModalVisible] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
   const [editModal, SetEditModal] = useState(false);
   const [editStaff, SetEditStaff] = useState({
     id: "",
-staffId:"",
-personalEmail: "",
-professionalEmail:"",
-permanentAddress:"",
-currentAddress:"",
-doj:"",
-company_id:"",
+    staffId: "",
+    personalEmail: "",
+    professionalEmail: "",
+    permanentAddress: "",
+    currentAddress: "",
+    doj: "",
+    company_id: "",
     fullName: "",
-   
+
     gender: "",
     phoneNumber: "",
     address: "",
@@ -46,6 +64,7 @@ company_id:"",
     profilePic: "",
     isTrainer: false,
   });
+  console.log(selectedStaff);
 
   useEffect(() => {
     const fetchStaffData = () => {
@@ -79,49 +98,47 @@ company_id:"",
     fetchCompany();
   }, []);
 
+  useEffect(() => {
+    const fetchRole = () => {
+      GetRole()
+        .then((res) => {
+          const role = res.data.data;
+          setRole(role);
+          console.log(role, "gopi");
+        })
+        .catch((err) => {
+          console.log("Error fetching staff data:", err.message);
+        });
+    };
+    fetchRole();
+  }, []);
+  useEffect(() => {
+    const fetchDesignation = () => {
+      GetDesignation()
+        .then((res) => {
+          setDesignation(res.data.data);
+          console.log(res.data.data);
+        })
+        .catch((err) => {
+          console.log("Error fetching staff data:", err.message);
+        });
+    };
+    fetchDesignation();
+  }, []);
 
-useEffect(()=>{
-  const fetchRole= ()=>{
-    GetRole()
-    .then((res) => {
-      const role = res.data.data; 
-      setRole(role);
-      console.log(role, "gopi");
-    }).catch((err) => {
-      console.log("Error fetching staff data:", err.message);
-    });
-   
-  }
-  fetchRole();
-},[])
-useEffect(()=>{
-  const fetchDesignation= ()=>{
-    GetDesignation()
-    .then((res) => {
-     
-      setDesignation(res.data.data);
-      console.log(res.data.data);
-      
-    }).catch((err) => {
-      console.log("Error fetching staff data:", err.message);
-    });
-   
-  }
-  fetchDesignation();
-},[])
-
-useEffect(()=>{
-  const fetchDepartment =()=>{
-    GetDeparment()
-    .then((res) => {
-      setDepartment(res.data.data)
-      console.log(res.data.data,"nandan");
-    }).catch((err) => {
-      console.log("error",err);
-    });
-  }
-  fetchDepartment();
-},[])
+  useEffect(() => {
+    const fetchDepartment = () => {
+      GetDeparment()
+        .then((res) => {
+          setDepartment(res.data.data);
+          console.log(res.data.data, "nandan");
+        })
+        .catch((err) => {
+          console.log("error", err);
+        });
+    };
+    fetchDepartment();
+  }, []);
 
   const handleOpenModal = () => {
     setIsModalVisible(true);
@@ -146,9 +163,9 @@ useEffect(()=>{
   };
 
   const handleAddStaff = async (values) => {
-    console.log(values,"values")
+    console.log(values, "values");
     const formData = new FormData();
-    formData.append("staffId",values.staffId)
+    formData.append("staffId", values.staffId);
     formData.append("fullName", values.fullName);
     formData.append("personalEmail", values.personalEmail);
     formData.append("professionalEmail", values.professionalEmail);
@@ -160,7 +177,7 @@ useEffect(()=>{
     formData.append("qualification", values.qualification);
     formData.append("dob", values.dob);
     formData.append("doj", values.doj);
-    formData.append("company_id",values.company)
+    formData.append("company_id", values.company);
     formData.append("experience", values.experience);
     formData.append("department_id", values.department);
     formData.append("hybrid", values.hybrid);
@@ -213,7 +230,7 @@ useEffect(()=>{
       experience: staff.experience,
       department_id: staff.department,
       hybrid: staff.hybrid,
-      company_id:staff.company,
+      company_id: staff.company,
       role: staff.role,
       password: staff.password,
     });
@@ -222,17 +239,23 @@ useEffect(()=>{
   const handleEditStaff = (values) => {
     const editFormData = new FormData();
 
+    editFormData.append("staffId", editStaff.staffId);
     editFormData.append("fullName", editStaff.fullName);
-    editFormData.append("email", editStaff.email);
+    editFormData.append("personalEmail", editStaff.personalEmail);
+    editFormData.append("professionalEmail", editStaff.professionalEmail);
     editFormData.append("gender", editStaff.gender);
     editFormData.append("phoneNumber", editStaff.phoneNumber);
-    editFormData.append("address", editStaff.address);
-    editFormData.append("designation", editStaff.designation);
+    editFormData.append("permanentAddress", editStaff.permanentAddress);
+    editFormData.append("currentAddress", editStaff.currentAddress);
+    editFormData.append("designation", editStaff.designation_id);
     editFormData.append("qualification", editStaff.qualification);
     editFormData.append("dob", editStaff.dob);
+    editFormData.append("doj", editStaff.doj);
     editFormData.append("experience", editStaff.experience);
-    editFormData.append("department", editStaff.department);
+    editFormData.append("department", editStaff.department_id);
+    editFormData.append("company", editStaff.company_id);
     editFormData.append("hybrid", editStaff.hybrid);
+    editFormData.append("istrainer", editStaff.isTrainer);
     editFormData.append("role", editStaff.role);
     // editFormData.append("password", editStaff.password);
 
@@ -264,7 +287,7 @@ useEffect(()=>{
       cancelButtonProps: {
         className: "bg-gray-500 text-white hover:bg-gray-600",
       },
-      
+
       onOk: async () => {
         try {
           // Pass the correct ID to delete
@@ -454,34 +477,42 @@ useEffect(()=>{
             <Input className="w-full" />
           </Form.Item>
 
-          <Form.Item label="Permanent Address" name="permanentAddress" className="col-span-1">
+          <Form.Item
+            label="Permanent Address"
+            name="permanentAddress"
+            className="col-span-1"
+          >
             <Input className="w-full" />
           </Form.Item>
-          <Form.Item label="Current Address" name="currentAddress" className="col-span-1">
+          <Form.Item
+            label="Current Address"
+            name="currentAddress"
+            className="col-span-1"
+          >
             <Input className="w-full" />
           </Form.Item>
-<Form.Item label="Designation" name="designation">
-          <Select placeholder="Select a designation">
-          {designation.map((desg) => (
-            <Option key={desg.id} value={desg._id}>
-              {desg.title}
-            </Option>
-          ))}
-        </Select>
-        </Form.Item>
+          <Form.Item label="Designation" name="designation">
+            <Select placeholder="Select a designation">
+              {designation.map((desg) => (
+                <Option key={desg.id} value={desg._id}>
+                  {desg.title}
+                </Option>
+              ))}
+            </Select>
+          </Form.Item>
           <Form.Item
             label="Role"
             name="role"
             rules={[{ required: true, message: "Please select role" }]}
             className="col-span-1"
           >
-           <Select className="w-full" onChange={handleRoleChange}>
-      {role.map((role) => (
-        <Option key={role.id} value={role._id}>
-          {role.roleName}
-        </Option>
-      ))}
-    </Select>
+            <Select className="w-full" onChange={handleRoleChange}>
+              {role.map((role) => (
+                <Option key={role.id} value={role._id}>
+                  {role.roleName}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
 
           <Form.Item
@@ -543,30 +574,23 @@ useEffect(()=>{
             name="department"
             className="col-span-1"
           >
-             <Select placeholder="Select a department" className="w-full">
-      {department.map((department) => (
-        <Option key={department._id } value={department._id}>
-        {department.name}
-      </Option>
-      ))}
-    </Select>
+            <Select placeholder="Select a department" className="w-full">
+              {department.map((department) => (
+                <Option key={department._id} value={department._id}>
+                  {department.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
-          <Form.Item
-            label="Company"
-            name="company"
-            className="col-span-1"
-          >
-             <Select placeholder="Select a Company" className="w-full">
-      {company.map((companies) => (
-        <Option key={companies.id } value={companies._id}>
-        {companies.companyName}
-      </Option>
-      ))}
-    </Select>
+          <Form.Item label="Company" name="company" className="col-span-1">
+            <Select placeholder="Select a Company" className="w-full">
+              {company.map((companies) => (
+                <Option key={companies.id} value={companies._id}>
+                  {companies.companyName}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
-
-
-
 
           <Form.Item
             label="Hybrid"
@@ -614,7 +638,10 @@ useEffect(()=>{
           )}
 
           <Form.Item className="col-span-2">
-            <button  htmlType="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md">
+            <button
+              htmlType="submit"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md"
+            >
               Add Staff
             </button>
           </Form.Item>
@@ -702,21 +729,21 @@ useEffect(()=>{
             onFinish={handleEditStaff}
             className="grid grid-cols-1 md:grid-cols-2 md:gap-x-4"
           >
-
-
-<Form.Item
-            label="Staff ID"
-            name="staffId"
-            rules={[{ required: true, message: "Please enter the StaffId" }]}
-            className="col-span-1"
-          >
-            <Input className="w-full" 
-            value={editStaff.staffId}
-            onChange={(e) =>
+            <Form.Item
+              label="Staff ID"
+              // name="staffId"
+              rules={[{ required: true, message: "Please enter the StaffId" }]}
+              className="col-span-1"
+            >
+              <Input
+                className="w-full"
+                value={editStaff.staffId}
+                onChange={(e) =>
                   SetEditStaff({ ...editStaff, staffId: e.target.value })
-                }/>
-          </Form.Item>
-            
+                }
+              />
+            </Form.Item>
+
             <Form.Item
               label="Full Name"
               // name="fullName"
@@ -733,32 +760,41 @@ useEffect(()=>{
             </Form.Item>
 
             <Form.Item
-            label="Personal Email"
-            name="personalEmail"
-            rules={[{ type: "email", message: "Please enter a valid email" }]}
-            className="col-span-1"
-          >
-            <Input className="w-full"  value={editStaff.personalEmail}
-            onChange={(e) =>
+              label="Personal Email"
+              // name="personalEmail"
+              rules={[{ type: "email", message: "Please enter a valid email" }]}
+              className="col-span-1"
+            >
+              <Input
+                className="w-full"
+                value={editStaff.personalEmail}
+                onChange={(e) =>
                   SetEditStaff({ ...editStaff, personalEmail: e.target.value })
-                } />
-          </Form.Item>
+                }
+              />
+            </Form.Item>
 
             <Form.Item
-            label="Professional Email"
-            name="professionalEmail"
-            rules={[{ type: "email", message: "Please enter a valid email" }]}
-            className="col-span-1"
-          >
-            <Input className="w-full"  value={editStaff.professionalEmail}
-            onChange={(e) =>
-                  SetEditStaff({ ...editStaff, professionalEmail: e.target.value })
-                } />
-          </Form.Item>
+              label="Professional Email"
+              // name="professionalEmail"
+              rules={[{ type: "email", message: "Please enter a valid email" }]}
+              className="col-span-1"
+            >
+              <Input
+                className="w-full"
+                value={editStaff.professionalEmail}
+                onChange={(e) =>
+                  SetEditStaff({
+                    ...editStaff,
+                    professionalEmail: e.target.value,
+                  })
+                }
+              />
+            </Form.Item>
 
-            
-            <Form.Item label="Gender"               
-            // name="gender"
+            <Form.Item
+              label="Gender"
+              // name="gender"
               rules={[{ required: true, message: "Please select gender" }]}
               className="col-span-1"
             >
@@ -791,7 +827,7 @@ useEffect(()=>{
             </Form.Item>
 
             <Form.Item
-              label="Permanent Address"
+              label="PermanentAddress"
               // name="address"
               className="col-span-1"
             >
@@ -799,7 +835,10 @@ useEffect(()=>{
                 className="w-full"
                 value={editStaff.permanentAddress}
                 onChange={(e) =>
-                  SetEditStaff({ ...editStaff, permanentAddress: e.target.value })
+                  SetEditStaff({
+                    ...editStaff,
+                    permanentAddress: e.target.value,
+                  })
                 }
               />
             </Form.Item>
@@ -810,6 +849,7 @@ useEffect(()=>{
             >
               <Input
                 className="w-full"
+
                 value={editStaff.currentAddress}
                 onChange={(e) =>
                   SetEditStaff({ ...editStaff, currentAddress: e.target.value })
@@ -819,16 +859,21 @@ useEffect(()=>{
 
             <Form.Item
               label="Designation"
-              name="designation"
               className="col-span-1"
             >
-              <Input
-                className="w-full"
+              <Select
+                placeholder="Select a designation"
                 value={editStaff.designation_id}
-                onChange={(e) =>
-                  SetEditStaff({ ...editStaff, designation_id: e.target.value })
-                }
-              />
+                onChange={(value)=>{
+                  SetEditStaff({...editStaff,designation_id: value})
+                }}
+              >
+                {designation.map((desg) => (
+                  <Option key={desg.id} value={desg._id}>
+                    {desg.title}
+                  </Option>
+                ))}
+              </Select>
             </Form.Item>
             <Form.Item
               label="Role"
@@ -845,11 +890,11 @@ useEffect(()=>{
                   SetEditStaff({ ...editStaff, role: value });
                 }}
               >
-                  {role.map((role) => (
-        <Option key={role.id} value={role._id}>
-          {role.roleName}
-        </Option>
-      ))}
+                {role.map((role) => (
+                  <Option key={role.id} value={role._id}>
+                    {role.roleName}
+                  </Option>
+                ))}
               </Select>
             </Form.Item>
 
@@ -889,6 +934,28 @@ useEffect(()=>{
                 }
               />
             </Form.Item>
+            <Form.Item
+              label="Date of Join"
+              // name="dob"
+              rules={[
+                { required: true, message: "Please select date of join" },
+              ]}
+              className="col-span-1"
+            >
+              <DatePicker
+                className="w-full"
+                format="DD-MM-YY"
+                value={
+                  editStaff.doj ? dayjs(editStaff.doj, "DD-MM-YYYY") : null
+                }
+                onChange={(e) =>
+                  SetEditStaff({
+                    ...editStaff,
+                    doj: e ? e.format("DD-MM-YYYY") : null,
+                  })
+                }
+              />
+            </Form.Item>
 
             <Form.Item
               label="Experience"
@@ -908,22 +975,38 @@ useEffect(()=>{
                 <Option value="5+">5+</Option>
               </Select>
             </Form.Item>
-            <Form.Item
-            label="Department"
-          
-            className="col-span-1"
-          >
-            <Select className="w-full"
-             value={editStaff.department_id}
-             onChange={(value)=> SetEditStaff({...editStaff, department: value})}
-             >
-              <Option value="DEV-Team">DEV-Team</Option>
-              <Option value="DM-Team">DM-Team</Option>
-              <Option value="SALES-Team">SALES-Team</Option>
-              <Option value="MARKETING-Team">MARKETING-Team</Option>
-              <Option value="PLACEMENT-Team">PLACEMENT-Team</Option>
-            </Select>
-          </Form.Item>
+            <Form.Item label="Department" className="col-span-1">
+              <Select
+                placeholder="Select a department"
+                className="w-full"
+                value={editStaff.department_id}
+                onChange={(value) =>
+                  SetEditStaff({ ...editStaff, department: value })
+                }
+              >
+                {department.map((department) => (
+                  <Option key={department._id} value={department._id}>
+                    {department.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item label="Company" className="col-span-1">
+              <Select
+                placeholder="Select a Company"
+                className="w-full"
+                value={editStaff.company_id}
+                onChange={(value) =>
+                  SetEditStaff({ ...editStaff, company_id: value })
+                }
+              >
+                {company.map((companies) => (
+                  <Option key={companies._id} value={companies._id}>
+                    {companies.name}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
 
             <Form.Item
               label="Hybrid"
@@ -962,7 +1045,10 @@ useEffect(()=>{
               </Upload>
             </Form.Item>
             <Form.Item className="col-span-2">
-              <button  htmlType="submit" className="w-full bg-orange-500 hover:bg-orange-600 text-white py-1 rounded-md">
+              <button
+                htmlType="submit"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white py-1 rounded-md"
+              >
                 Add Staff
               </button>
             </Form.Item>
