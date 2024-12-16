@@ -13,10 +13,6 @@ const RoleSchema = mongoose.Schema({
     type:String,
     required:true
    },
-   admin:{
-    type:Array,
-    default:[],
-   },
    batch:{
     type:Array,
     default:[]
@@ -37,7 +33,7 @@ const RoleSchema = mongoose.Schema({
     type:Array,
     default:[]
    },
-   assesment:{
+   assessment:{
     type:Array,
     default:[]
    },
@@ -45,7 +41,7 @@ const RoleSchema = mongoose.Schema({
     type:Array,
     default:[]
    },
-   shedule:{
+   schedule:{
     type:Array,
     default:[]
    },
@@ -73,14 +69,14 @@ const RoleSchema = mongoose.Schema({
     type:Array,
     default:[]
    },
-   system:{
+   config:{
     type:Array,
     default:[]
    },
    leave:{
     type:Array,
     default:[],
-   },
+   }, 
    role:{
     type:Array,
     default:[]
@@ -96,7 +92,15 @@ const RoleSchema = mongoose.Schema({
    monthlyPayroll:{
       type:Array,
       default:[]
-   }
+   },
+   company:{
+      type:Array,
+      default:[]
+   },
+   designation:{
+      type:Array,
+      default:[]
+   },
 
   },{timestamp:true,collection:"Role"});
 
