@@ -84,8 +84,10 @@ const SalaryConfig = () => {
     setIsEdited(true);
     console.log(isPercentage, "asd");
     let { value, name, checked } = e.target;
-    value = isPercentage ? value / 100 : value;
+    console.log(value!="","value before")
+    value = isPercentage && value!="" ? value / 100 : value;
     value = isDuration ? hhmmToSeconds(value) : value;
+    console.log(value,"value after")
     setConfig((prevConfig) => {
       const updatedConfig = {
         ...prevConfig,
@@ -129,6 +131,14 @@ const SalaryConfig = () => {
       }
     }
   };
+
+  const calculatePercentage = (value)=>{
+    if(value==""){
+      console.log(value,"in calu")
+      return "";
+    }
+    return value*100
+  }
 
   return (
     <div className="flex">
@@ -239,7 +249,7 @@ const SalaryConfig = () => {
               <InputField
                 label="ESI %"
                 name="esi"
-                value={config.esi * 100}
+                value={()=>calculatePercentage(config.esi)}
                 handleChange={handleChange}
                 isEdit={isEdit}
                 option={{ isPercentage: true }}
