@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaTachometerAlt } from "react-icons/fa";
 // import { Navbar } from "./Navbar";
 import logo from "../../assets/Login/NavbarLogo.png";
+import { useSelector } from "react-redux";
 
 const generateMenu = (menubarData) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -46,7 +47,7 @@ const generateMenu = (menubarData) => {
 };
 
 const CommonSideBar = () => {
-  const permissions = { dashboard: [], batch: [] };
+  const permissions = useSelector((state)=>state.Permissions);
 
   const sidebarMenus = [
     {
@@ -58,8 +59,8 @@ const CommonSideBar = () => {
     {
       key: "batch",
       icon: FaTachometerAlt,
-      label: "Batch",
-      path: "/batch",
+      label: "Batches",
+      path: "/batches",
     },
     {
       key: "basic-details",

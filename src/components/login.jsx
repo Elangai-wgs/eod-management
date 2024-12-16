@@ -5,12 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../services";
 // import { PermissionContext } from "../App";
 import { useDispatch } from "react-redux";
+import { setPermission } from "../Redux/PermissionRedux";
 
 
 
 const Login = () => {
   const dispatch = useDispatch();
-  const {permission,setPermission} = useContext(PermissionContext)
+  // const {permission,setPermission} = useContext(PermissionContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authorityLevel, setAuthorityLevel] = useState("");
@@ -41,10 +42,10 @@ const Login = () => {
 
               localStorage.setItem("authToken", response.data.data.token);
               const authorityLevel = response.data.data?.role.authorityLevel;
-              setPermission(response.data.data?.role)
+              // setPermission(response.data.data?.role)
               setEmail("");
               setPassword("");
-              setAuthorityLevel(authorityLevel);
+              // setAuthorityLevel(authorityLevel);
               console.log("User Role:", authorityLevel);
               navigate('/dashboard');
               dispatch(setPermission(response.data.data?.role))

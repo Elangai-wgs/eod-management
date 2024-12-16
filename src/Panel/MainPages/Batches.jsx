@@ -355,7 +355,7 @@ import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 const { Option } = Select;
 
 const Batches = () => {
-  const permission = useSelector((state)=>state.permission?.batch);
+  const permission = useSelector((state)=>state.Permissions?.batch);
   const [batches, setBatches] = useState([]);
   const [staffs, setStaffs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -376,6 +376,7 @@ const Batches = () => {
       }
     };
     fetchStaffs();
+    console.log(permission,"permission")
   }, []);
 
   

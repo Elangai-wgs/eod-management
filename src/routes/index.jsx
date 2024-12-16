@@ -1,66 +1,61 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { useEffect } from 'react';
+import { useEffect } from "react";
 import routePages from "./routes";
-import PageNotFoud from '../components/PageNotFound'
 import PageNotFound from "../components/PageNotFound";
+import { useSelector } from "react-redux";
+import { isAllowedTo } from "../utils/utils";
 
-const isAllowed = (access = []) => {
-    const role = localStorage.getItem("role") || "superAdmin";
-    return access.includes(role) || access.includes("open");
+// Utility function for checking access permissions
+const isAllowed = (access = [], key = "", permissionKeys = []) => {
+  return access.includes("open") || isAllowedTo(permissionKeys, [key]);
 };
 
-const createRoute = (key, path, element, nestedRouteElements) => (
-    <Route key={key} path={path} element={element}>
+// Recursive function to create routes
+const renderRoutes = (routesArray = [], permissionKeys = []) => {
+  return routesArray.map((route) => {
+    const { access, element, path, title, nestedRoutes, key: permissionKey } = route;
+
+    // Check permissions before rendering the route
+    if (!isAllowed(access, permissionKey, permissionKeys)) return null;
+
+    // Recursively render nested routes if available
+    const nestedRouteElements = nestedRoutes
+      ? renderRoutes(nestedRoutes, permissionKeys)
+      : null;
+
+    return (
+      <Route key={title} path={path} element={element}>
         {nestedRouteElements}
-    </Route>
-);
-
-const renderNestedRoutes = (nestedRoutesArray = []) => {
-    return nestedRoutesArray.map((route, index) => {
-        const { access, element, path, title, nestedRoutes } = route;
-        if (!isAllowed(access)) {
-            return null;
-        }
-        const nestedRouteElements = nestedRoutes ? renderNestedRoutes(nestedRoutes) : null;
-        const key = title;
-
-        return createRoute(key, path, element, nestedRouteElements);
-    });
-};
-
-const renderRoutes = (routesArray = []) => {
-    return routesArray.map((route, index) => {
-        const { access, element, path, title, nestedRoutes } = route;
-        if (!isAllowed(access)) {
-            return null;
-        }
-        const nestedRouteElements = nestedRoutes ? renderNestedRoutes(nestedRoutes) : null;
-        const key = title;
-
-        return createRoute(key, path, element, nestedRouteElements);
-    });
+      </Route>
+    );
+  });
 };
 
 const Routers = () => {
-  
-    const location = useLocation();
-    const navigate = useNavigate();
+  const permission = useSelector((state) => state.Permissions);
+  console.log(permission,"permissions")
+  const permissionKeys = Object.keys(permission??{});
+  const location = useLocation();
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        if (localStorage.getItem('adminToken')&&location.pathname === "/") {
-            navigate("/dashboard");
-        }
-        if(!localStorage.getItem('adminToken')&&location.pathname === "/"){
-            navigate("/login"); 
-        }
-    }, [location, navigate]);
+  useEffect(() => {
+    const token = localStorage.getItem("adminToken");
+    if (token && location.pathname === "/") {
+      navigate("/dashboard");
+    } else if (!token && location.pathname === "/") {
+      navigate("/login");
+    }
+  }, [location, navigate]);
 
-    return (
-        <Routes>
-            {renderRoutes(routePages)}
-            <Route path="*" element={<PageNotFound />} />
-        </Routes>
-    );
+  return (
+    <Routes>
+      {/* Render all routes */}
+      {renderRoutes(routePages, permissionKeys)}
+
+      {/* Fallback route for unmatched paths */}
+      <Route path="*" element={<PageNotFound />} />
+    </Routes>
+  );
 };
 
 export default Routers;
