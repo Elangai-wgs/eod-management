@@ -109,6 +109,19 @@ await newAssignBatch.save();
 
 
 exports.getTraineeAll = async(req)=>{
+    const {authId}= req;
+
+    const user = await Auth.findById(authId).populate('role')
+    if (!user) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, { message: "User not authorized" });
+    }
+
+    const { role } = user;
+
+    if (!role || !role.trainee || !role.trainee.includes('viewOwn')) {
+        throw new ApiError(httpStatus.FORBIDDEN, { message: "You do not have permission to view attendance" });
+    }
+
     const trainee = await TraineeModel.find({})
     if (!trainee) {
         throw new ApiError(httpStatus.BAD_REQUEST, {message:"Trainer not found"});
@@ -121,7 +134,6 @@ exports.getTraineeAll = async(req)=>{
 exports.getTraineeId = async(req)=>{
     const {authId} = req;
     const {_id} = req.params;
-    console.log(_id,"sssss");
     
 
     if (!_id) {

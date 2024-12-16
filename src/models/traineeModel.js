@@ -26,7 +26,7 @@ const traineeSchema = new mongoose.Schema({
     hybrid: schemaFields.StringWithEnumAndRequired(['Online','Offline','WFH']),
     department: schemaFields.UUIDIdReference("Department"),
     qualification:schemaFields.requiredAndString,
-    experience: schemaFields.StringWithEnumAndRequired(['0 to 1 year', '1 to 3 year', '3 to 5', '5+']),
+    experience: schemaFields.StringWithEnumAndRequired(['0 to 1 year', '1 to 3 year', '3 to 5 years', '5+ years']),
     role: schemaFields.UUIDIdReference('Role'),
     isActive: schemaFields.BooleanWithDefault,
     createdBy:schemaFields.UUIDIdReference('Staff'),

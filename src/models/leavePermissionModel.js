@@ -11,8 +11,8 @@ const leaveSchema = new mongoose.Schema({
     },
     startDateString: String, // dd/mm/yyyy
     endDateString: String,
-    startDate: Date,
-    endDate: Date,
+    startDate: schemaFields.DateWithDefault,
+    endDate: schemaFields.DateWithDefault,
     leaveType: {
         type: String,
         enum: ['sick', 'casual', 'annual','permission','wfh','online', 'compOff'],

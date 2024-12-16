@@ -8,6 +8,7 @@ const TraineeModel = require("../models/traineeModel");
 const ApiError = require("../utils/apiError");
 const utils = require("../utils/utils");
 const jwt = require('jsonwebtoken');
+const LeaveApplyModel = require("../models/leavePermissionModel");
 
 
 
@@ -17,7 +18,6 @@ exports.loginByEmailAndLogId = async(req)=>{
     if (!user) {
         throw new ApiError(status.UNAUTHORIZED, {message:"Invalid credantials",status:false,});
       }
-
     
       const now = new Date();
       const startOfDay = utils.Currentdate();
@@ -67,6 +67,7 @@ exports.loginByEmailAndLogId = async(req)=>{
 
         attendance = new AttendanceModel({
           user: user.accountId,
+          auth: user._id,
           dateString: startOfDay,
           checkIn: now,
           status: now > workStart ? "Late" : "Present",
@@ -109,6 +110,7 @@ exports.createAttendance = async(req)=>{
       checkIn: null,
       checkOut: null,
       user: employee.accountId,
+      auth: employee._id,
       location: { latitude: 0, longitude: 0 },
       status: 'Absent',
       islate: false,
@@ -120,26 +122,70 @@ exports.createAttendance = async(req)=>{
 
     if (attendanceData.length > 0) {
       await AttendanceModel.insertMany(attendanceData);
-      return { message: "Default attendance created for employees", count: attendanceData.length };
     }
 
+    const approvedLeaves = await LeaveApplyModel.find({
+      status: 'approved',
+      startDate: { $lte: new Date() },
+      $or: [{ endDate: { $gte: new Date() } }, { endDate: null }],
+    })
 
+    const leaveUserIds = approvedLeaves.map(leave => leave.userId);
+    if (leaveUserIds.length > 0) {
+      for (const leave of approvedLeaves) {
+        const updateFields = {
+          status: "Leave",
+          isApprovedLeave: true,
+        };
+
+        if (leave.leaveType === "permission") {
+          updateFields.isApprovedPermission = true;
+        } else if (leave.leaveType === "wfh") {
+          updateFields.isApprovedWFH = true;
+        } else if (leave.leaveType === "online") {
+          updateFields.isApprovedOnline = true;
+        } else if (leave.leaveType === "compOff") {
+          updateFields.isApprovedCompoff = true;
+        }
+
+        await AttendanceModel.updateOne(
+          { user: leave.userId, dateString: todayDate },
+          { $set: updateFields }
+        );
+      }
+    }
+
+    return {
+      message: "Attendance created/updated successfully",
+      defaultAttendanceCount: attendanceData.length,
+      leaveUpdatedCount: leaveUserIds.length,
+    };
 
 }
 
 exports.getAttendance = async(req)=>{
+  const { authId } = req
+
+  const user = await Auth.findById(authId).populate('role')
+
+  if (!user) {
+    throw new ApiError(status.UNAUTHORIZED, { message: "User not authorized" });
+}
+
+const { role } = user;
+
+if (!role || !role.attendance || !role.attendance.includes('view')) {
+    throw new ApiError(status.FORBIDDEN, { message: "You do not have permission to view attendance" });
+}
+
   const attendance = await AttendanceModel.find().populate({
-    path:'user',
+    path:'auth',
     select:'fullName profilePic',
     populate:{
       path:'role',
-      model:'Role',
-      select:'name'
+      select:'roleName'
     }
   });
-
-  console.log(attendance,"aljalkjljal");
-  
 
   if (!attendance) {
     throw new ApiError(status.BAD_REQUEST, {message:"Attendance not found password"});
@@ -214,7 +260,6 @@ exports.editTraineeAttendance = async(req)=>{
 
     return attendance;
 }
-
 
 
 exports.logoutUser = async (req) => {

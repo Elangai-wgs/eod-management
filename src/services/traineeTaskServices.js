@@ -14,21 +14,27 @@ const TraineeModel = require("../models/traineeModel");
 
 
 exports.createTraineeTask = async(req)=>{
-    const { title, description, dueDate, priority, batchId} = req.body;
+    const { title, description, dueDate, priority, batchId, traineeIds} = req.body;
     const { accountId } = req;
-    console.log(accountId,"ajajakaakakaal");
-    
 
-    const traineeData = await AssignedBatchModel.find({batchId, trainee:{$exists:true}}).populate('trainee'); 
-    const trainerData = await AssignedBatchModel.find({batchId,trainer:accountId});
-  
-    if ( !trainerData) {
-        throw new ApiError(httpStatus.BAD_REQUEST,{message: 'Batch not found for trainer'}); 
+    const trainerData = await AssignedBatchModel.findOne({ batchId, trainer: accountId });
+    if (!trainerData) {
+        throw new ApiError(httpStatus.BAD_REQUEST, { message: 'Batch not found for trainer' });
     }
 
+    const traineeData = await AssignedBatchModel.find({batchId, trainee:{$exists:true}}).populate('trainee');
     if (!traineeData || traineeData.length === 0) {
         throw new ApiError(httpStatus.BAD_REQUEST, { message: 'No trainees found in the batch' });
-    }
+      }
+
+
+      const selectedTrainees = traineeIds && traineeIds.length > 0
+    ? traineeData.filter((data) => traineeIds.includes(data.trainee._id.toString()))
+    : traineeData;
+
+  if (!selectedTrainees || selectedTrainees.length === 0) {
+    throw new ApiError(httpStatus.BAD_REQUEST, { message: 'Selected trainees not found in the batch' });
+  }
 
 
     const newTask = await TraineeTaskModel.create({
@@ -36,13 +42,12 @@ exports.createTraineeTask = async(req)=>{
         description,
         dueDate,
         trainerId:accountId,
-        batchId
+        batchId,
+        priority
     });
 
 
-    const progressEntries = traineeData
-    .filter((data) => data.trainee)
-    .map((data) => ({
+    const progressEntries = selectedTrainees.map((data) => ({
         taskId: newTask._id,
         traineeId: data.trainee._id,
         status: 'not attended',
@@ -51,7 +56,7 @@ exports.createTraineeTask = async(req)=>{
 await StudentProgressModel.insertMany(progressEntries);
 
  
-    const notifications = traineeData.map((doc) => ({
+    const notifications = selectedTrainees.map((doc) => ({
         title: "Alert",
         content: `You have been assigned a new task: ${title}`,
         recipientId: doc.trainee,
@@ -60,7 +65,7 @@ await StudentProgressModel.insertMany(progressEntries);
 
     await NotificationModel.insertMany(notifications);
    
-    traineeData.forEach((doc) => {
+    selectedTrainees.forEach((doc) => {
         const traineeId = doc.trainee;
         const socketId = req.io.connectedUsers ? req.io.connectedUsers[traineeId] : null
         if (socketId) {

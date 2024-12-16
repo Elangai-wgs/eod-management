@@ -13,7 +13,7 @@ const Router = express.Router();
 // Router.use(verifyAuthToken); checkPermission(permissionGroups.adminManagement.create)
 
 Router.route('/createStaff').post(verifyAuthToken,uploads.single('profilePic'),staffController.createStaff);
-Router.route('/getStaffAll').get(staffController.getStaffAll);
+Router.route('/getStaffAll').get(verifyAuthToken,staffController.getStaffAll);
 Router.route('/getFilterStaff').get(staffController.getFilterStaff);
 Router.route('/getStaffId/:_id').get(staffController.getStaffId);
 Router.route('/editStaff/:_id').put(verifyAuthToken,uploads.single('profilePic'),staffController.editStaff);

@@ -10,12 +10,15 @@ const attendanceSchema = new mongoose.Schema({
     checkIn:{
         type: Date,
     },
-    user: {
+    user:{
         type: String,
         ref: 'Auth',
-        required: true,
+        required: true
     },
-    
+    auth:{
+        type: String,
+        ref: 'Auth',
+    },
     checkOut:{
         type: Date,
     },

@@ -1,4 +1,5 @@
 const {AssignedBatchModel} = require("../models/assignedBatchesModel");
+const Auth = require("../models/authModel");
 const BatchModel = require("../models/batchModel");
 const StaffModel = require("../models/staffModel");
 const TraineeModel = require("../models/traineeModel");
@@ -48,6 +49,7 @@ const generateBatchName = async() =>{
 exports.createBatch = async(req)=>{
     const { authId } = req
     const { courseName, courseDuration, batchTimings, trainer,} = req.body
+
     const batchId = await generateBatchId(courseName);
     
     if (!batchId) {
@@ -55,7 +57,6 @@ exports.createBatch = async(req)=>{
     }
 
     const trainerId = await StaffModel.find({ _id: { $in: trainer },isTrainer:true});
-    console.log("gfdfddg",trainerId);
     
     if (!trainerId) {
         throw new ApiError(httpStatus.BAD_REQUEST, { message: 'Trainer not found' });
@@ -96,6 +97,19 @@ exports.createBatch = async(req)=>{
 
 
 exports.getBatchAll = async (req) => {
+    const { authId } = req;
+
+    const user = await Auth.findById(authId).populate('role')
+    if (!user) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, { message: "User not authorized" });
+    }
+
+    const { role } = user;
+
+    if (!role || !role.attendance || !role.attendance.includes('view')) {
+        throw new ApiError(httpStatus.FORBIDDEN, { message: "You do not have permission to view attendance" });
+    }
+
         const result = await BatchModel.aggregate([
             {
                 
@@ -106,13 +120,6 @@ exports.getBatchAll = async (req) => {
                     as: "assignedData"
                 }
             },
-            // {
-                
-            //     $unwind: {
-            //         path: "$assignedData",
-            //         preserveNullAndEmptyArrays: true
-            //     }
-            // },
             {
                 
                 $lookup: {
@@ -195,7 +202,6 @@ exports.getBatchId = async (req) => {
         };
    
 };
-
 
 
 exports.editBatch = async(req)=>{

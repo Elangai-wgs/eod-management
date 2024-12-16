@@ -44,6 +44,7 @@ const generateStaffLogId = async(companyId,departmentId)=>{
 
 
 exports.createStaff = async(req)=>{
+    const { authId } = req.authId;
     const staffData = req.body;
 
     if (!validator.isEmail(staffData.professionalEmail)) {
@@ -158,7 +159,24 @@ exports.createStaff = async(req)=>{
 
 
 exports.getStaffAll = async(req)=>{
-    const staff = await StaffModel.find({}).populate("role").populate("designation").populate("department_id")
+    const { authId } = req;
+
+    const user = await Auth.findById(authId).populate('role')
+    
+    if (!user) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, { message: "User not authorized" });
+    }
+
+    const { role } = user;
+
+    if (!role || !role.staffs || !role.staffs.includes('view')) {
+        throw new ApiError(httpStatus.FORBIDDEN, { message: "You do not have permission to view staff" });
+    }
+
+    const staff = await StaffModel.find({}).populate({
+        path:'role',
+        select:'roleName'
+    }).populate("designation").populate("department_id")
     if (!staff) {
         throw new ApiError(httpStatus.BAD_REQUEST, {message:"Staff not found"});
      }

@@ -48,7 +48,7 @@ const verifyToken = async (token, model) => {
     
     const user = await model.findById(payload.id).populate({
       path: "role", // Ensure this matches your schema setup
-      select: "roleName permissions hierarchyLevel",
+      select: "roleName hierarchyLevel",
     });
     console.log(user,"userid");
     
@@ -121,8 +121,8 @@ const verifyAuthToken = async (req, res, next) => {
     req.accountId = result.user.accountId
     console.log(result.userId,"aaaa");
     console.log(result.user,"resulteeee");
-    console.log(result.user.batch,"batchee");
-    console.log(result.user.accountId,"Acount");
+    // console.log(result.user.batch,"batchee");
+    // console.log(result.user.accountId,"Acount");
    
     
     

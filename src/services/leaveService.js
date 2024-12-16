@@ -24,13 +24,13 @@ const leaveExtractor = (accountId, leaveData) => {
 };
 
 exports.applyLeaveRequset = async (req) => {
-  const { user:userData } = req;
+  const { authId } = req;
   const { leaveType, startDate, endDate, reason, startDateString, endDateString } = req.body;
 
-//   const user = await Auth.findOne({ accountId: accountId });
-//   if (!user) {
-//     throw new ApiError(httpStatus.BAD_REQUEST, { message: "User not found" });
-//   }
+  const user = await Auth.findById(authId);
+  if (!user) {
+    throw new ApiError(httpStatus.BAD_REQUEST, { message: "User not found" });
+  }
 
   const validLeaveTypes = [
     "sick",
@@ -47,7 +47,7 @@ exports.applyLeaveRequset = async (req) => {
   }
 
   const leave = new LeaveApplyModel({
-    userId: userData.accountId,
+    userId: user.accountId,
     date: startDate,
     endDate: endDate || null,
     leaveType: leaveType,
@@ -184,9 +184,7 @@ const updateHybridStatus = async (userId, startDate, endDate, leaveType) => {
   // Valid leave types for hybrid status
   const validHybridLeaves = ["sick", "wfh", "online", "casual"];
   if (!validHybridLeaves.includes(leaveType)) {
-    console.log(
-      `Leave type '${leaveType}' does not require hybrid status update`
-    );
+    console.log(`Leave type '${leaveType}' does not require hybrid status update`);
     return;
   }
 
