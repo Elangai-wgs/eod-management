@@ -1,84 +1,65 @@
-import React from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
-import { pages } from "./routes";
-// import { PageNotFound } from "../components/notfound";
-// import { UnauthorizedAccess } from "../components/unauthorized";
-// import { Navbar } from "../Panel/Common/Navbar";
-// import { Footer } from "../components/footer";
-import CommonSideBar from "../Panel/Common/CommonSideBar";
-import HomePage from "../Panel/Common/HomePage";
-
+import { useEffect } from 'react';
+import PageNotFound from '../pages/common/PageNotFound';
+import routePages from "./routes";
 
 const isAllowed = (access = []) => {
-  const token = localStorage.getItem("userToken");
-  return token || access.includes("open");
+    const role = localStorage.getItem("role") || "superAdmin";
+    return access.includes(role) || access.includes("open");
 };
 
-const createRoute = (key, path, element, nestedRouteElements, layout) => {
-  return (
+const createRoute = (key, path, element, nestedRouteElements) => (
     <Route key={key} path={path} element={element}>
-      {nestedRouteElements}
+        {nestedRouteElements}
     </Route>
-  );
-};
+);
 
 const renderNestedRoutes = (nestedRoutesArray = []) => {
-  return nestedRoutesArray.map((route) => {
-    const { access, element, path, nestedRoutes, layout } = route;
-    const nestedRouteElements = nestedRoutes
-      ? renderNestedRoutes(nestedRoutes)
-      : null;
-    const key = path;
+    return nestedRoutesArray.map((route, index) => {
+        const { access, element, path, title, nestedRoutes } = route;
+        if (!isAllowed(access)) {
+            return null;
+        }
+        const nestedRouteElements = nestedRoutes ? renderNestedRoutes(nestedRoutes) : null;
+        const key = title;
 
-    return createRoute(
-      key,
-      path,
-      isAllowed(access) ? element : <UnauthorizedAccess />,
-      nestedRouteElements,
-      layout
-    );
-  });
+        return createRoute(key, path, element, nestedRouteElements);
+    });
 };
 
 const renderRoutes = (routesArray = []) => {
-  return routesArray.map((route) => {
-    const { access, element, path, nestedRoutes, layout } = route;
-    const nestedRouteElements = nestedRoutes
-      ? renderNestedRoutes(nestedRoutes)
-      : null;
-    const key = path;
+    return routesArray.map((route, index) => {
+        const { access, element, path, title, nestedRoutes } = route;
+        if (!isAllowed(access)) {
+            return null;
+        }
+        const nestedRouteElements = nestedRoutes ? renderNestedRoutes(nestedRoutes) : null;
+        const key = title;
 
-    return createRoute(
-      key,
-      path,
-      isAllowed(access) ? element : <UnauthorizedAccess />,
-      nestedRouteElements,
-      layout
-    );
-  });
+        return createRoute(key, path, element, nestedRouteElements);
+    });
 };
 
+const Routers = () => {
+  
+    const location = useLocation();
+    const navigate = useNavigate();
 
+    useEffect(() => {
+        if (localStorage.getItem('adminToken')&&location.pathname === "/") {
+            navigate("/dashboard");
+        }
+        if(!localStorage.getItem('adminToken')&&location.pathname === "/"){
+            navigate("/login"); 
+        }
+    }, [location, navigate]);
 
-export function Routers() {
-  const pageRoutes = pages.map(({ title, path, element, children }) => {
-    // Handle parent route with potential children
-    if (children) {
-      return (
-        <Route key={title} path={path} element={element}>
-          {children.map(({ path: childPath, element: childElement }) => (
-            <Route key={childPath} path={childPath} element={childElement} />
-          ))}
-        </Route>
-      );
-    }
+    return (
+        <Routes>
+            {renderRoutes(routePages)}
+            <Route path="*" element={<PageNotFound />} />
+        </Routes>
+    );
+};
 
-    // Handle route without children
-    return <Route key={title} path={path} element={element} />;
-  });
-
-  return <Routes>{pageRoutes}
-   <Route key={"sdsd"} path={"/hello"} element={<HomePage/>} />
-
-  </Routes>;
-}
+export default Routers;

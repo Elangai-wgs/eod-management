@@ -365,6 +365,15 @@ return res;
   return res;
  }
 
+ export const EditCompany = async (data, id)=>{
+  const res = await interceptors.put(`/company/update/${id}`,data);
+  return res;
+ }
+
+ export const DeleteCompany = async (id)=>{
+  const res = await interceptors.delete(`/company/delete-h/${id}`);
+  return res;
+ }
 
 
  // Config
@@ -487,3 +496,5 @@ export const  DeletePayroll = async (id) => {
   const res = await interceptors.get('/designation/get-all')
   return res;
  }
+
+ 

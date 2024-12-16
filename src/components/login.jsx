@@ -33,7 +33,7 @@ const Login = () => {
 
         login(loginData)
           .then((response) => {
-            console.log("Login Response:", response.data.data?.role);
+            console.log("Login Response:", response);
 
             if (response.data.status === true) {
 

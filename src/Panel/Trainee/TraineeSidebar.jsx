@@ -1,14 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { FaTachometerAlt, FaClipboardList, FaBook, FaUserShield, FaChalkboardTeacher, FaUserGraduate, FaUsers, FaChevronDown, FaBell, FaComment, FaCalendarAlt, FaFileAlt } from 'react-icons/fa';
 import { SlCalender } from "react-icons/sl";
 import { MdAssignment } from 'react-icons/md';
 import { GiNotebook } from 'react-icons/gi';
 import logo from '../../assets/Login/NavbarLogo.png'
+import { logout } from '../../services';
 
 const Navbar = () => {
-  const location = useLocation();
 
+
+  const location = useLocation();
+  const [dropdown, setDropdown] = useState(false);
   const pageNames = {
     '/traineesidebar/dashboard': 'Dashboard',
    
@@ -20,20 +23,69 @@ const Navbar = () => {
     profileImage: 'https://via.placeholder.com/150', 
   };
 
+  const toggleDropdown = () => {
+    setDropdown((prev) => !prev);
+  };
+
+  
+  const handleLogout = async () => {
+    console.log("out");
+    try {
+      const res = await logout();
+      console.log(res);
+  
+      
+      localStorage.removeItem("token");
+      window.location.href = "/"; 
+    } catch (error) {
+      console.error('Error logging out:', error.message);
+    }
+    
+    setDropdown(false); 
+  };
+  
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".dropdown-container")) {
+        setDropdown(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+  
+
   return (
     <div className="bg-white shadow-md p-4 flex items-center justify-between">
       <h2 className="text-xl font-semibold text-orange-600">{currentPageName}</h2>
 
       <div className="flex items-center gap-4">
         <span className="font-semibold text-orange-600">{user.name}</span>
-
+<div className='relative dropdown-container'>
         <img
           src={user.profileImage}
           alt={user.name}
           className="w-8 h-8 rounded-full"
-        />
+          onClick={toggleDropdown}
+          />
+          {dropdown && (
+            <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 rounded shadow-md">
+        
+              <button
+                onClick={handleLogout}
+                className="w-full px-4 py-2 text-left text-sm text-orange-600 "
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+      </div>
   );
 };
 
