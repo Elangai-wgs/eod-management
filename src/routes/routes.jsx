@@ -26,6 +26,8 @@ import Schedule from "../Panel/MainPages/Schedule";
 import Staffs from "../Panel/MainPages/Staffs";
 import SuperEod from "../Panel/MainPages/SuperEod";
 import SuperReports from "../Panel/MainPages/SuperReport";
+import Task from "../Panel/MainPages/Task";
+import Trainee from "../Panel/MainPages/Trainee";
 import TrainerAssessment from "../Panel/MainPages/TrainerAssessment";
 import PageNotFound from "../components/PageNotFound";
 import UnauthorizedAccess from "../components/UnauthorizedAccess";
@@ -496,6 +498,21 @@ const routePages = [
                 key:"schedule",
                 element: <Schedule/>,
                 path: "schedule",
+                access: ["close"],
+              },
+              
+              {
+                title: "Task",
+                key:"task",
+                element: <Task/>,
+                path: "task",
+                access: ["close"],
+              },
+              {
+                title: "Trainee",
+                key:"trainee",
+                element: <Trainee/>,
+                path: "trainee",
                 access: ["close"],
               },
               
