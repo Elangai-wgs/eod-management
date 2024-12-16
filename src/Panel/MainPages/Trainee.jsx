@@ -13,7 +13,7 @@ import {
   message,
 } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { AddTrainee, GetBatches, GetTrainee, EditTrainee, DeleteTrainee } from "../../../../services";
+import { AddTrainee, GetBatches, GetTrainee, EditTrainee, DeleteTrainee } from "../../services";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import moment from 'moment'
 

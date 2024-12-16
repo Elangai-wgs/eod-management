@@ -1,14 +1,14 @@
 import Modal from 'antd/es/modal/Modal';
 import React, { useEffect, useState } from 'react';
-import { CreateProject, DeleteProject, EditProjectId, GetProjects } from '../../../../services';
+import { CreateProject, DeleteProject, EditProjectId, GetProjects } from '../../services';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Input, message } from 'antd';
 import { FaDeleteLeft, FaFolderOpen } from 'react-icons/fa6';
 import { FaEdit } from 'react-icons/fa';
 // import ProjectTask from './ProjectTask';
 import { useDispatch } from 'react-redux';
-import { setProjectId, setProjectTitle} from '../../../../Redux/TrainerRedux';
-import { store } from '../../../../Redux/Store';
+import { setProjectId, setProjectTitle} from '../../Redux/TrainerRedux';
+import { store } from '../../Redux/Store';
 
 const Task = () => {
 
