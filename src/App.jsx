@@ -1,8 +1,8 @@
 import { BrowserRouter, useLocation } from "react-router-dom";
 import "./App.css";
-import { Routers } from "./routes";
 import { Provider } from "react-redux";
 import { store } from "./Redux/Store";
+import Routers from './routes/index'
 import { createContext, useEffect, useState } from "react";
 
 export const PermissionContext = createContext();
@@ -22,7 +22,7 @@ function App() {
     <>
     <PermissionContext.Provider value={{permision,setPermission}}>
       <Provider store={store}>
-        <Routers />
+        <Routers/>
       </Provider>
       </PermissionContext.Provider>
     </>

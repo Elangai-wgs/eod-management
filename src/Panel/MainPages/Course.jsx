@@ -7,7 +7,7 @@ import {
   DeleteSyllabus,
   EditSyllabus,
   GetSyllabus,
-} from "../../../../services";
+} from "../../services";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 
 const { Option } = Select;

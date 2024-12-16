@@ -1,7 +1,7 @@
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useEffect } from 'react';
-import PageNotFound from '../pages/common/PageNotFound';
 import routePages from "./routes";
+import PageNotFound from "../components/PageNotFound";
 
 const isAllowed = (access = []) => {
     const role = localStorage.getItem("role") || "superAdmin";
