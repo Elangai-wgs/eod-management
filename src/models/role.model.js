@@ -88,6 +88,14 @@ const RoleSchema = mongoose.Schema({
    authorityLevel:{
     type:String,
     enum:['High','Medium','Low']
+   },
+   attendance:{
+      type:Array,
+      default:[]
+   },
+   monthlyPayroll:{
+      type:Array,
+      default:[]
    }
 
   },{timestamp:true,collection:"Role"});
