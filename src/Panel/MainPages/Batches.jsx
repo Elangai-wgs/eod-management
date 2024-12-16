@@ -350,6 +350,7 @@ import {
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { isAllowedTo } from "../../utils/utils";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const { Option } = Select;
 
@@ -553,166 +554,170 @@ const Batches = () => {
   };
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold">Batches</h2>
-        {isAllowedTo(permission,"create")&&<button
-          onClick={handleAddBatch}
-          className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-white hover:text-orange-600 hover:border border-orange-600 transition"
-        >
-          Add Batch
-        </button>}
-      </div>
-
-      <DataTable
-        columns={columns}
-        data={batches}
-        customStyles={customStyles}
-        pagination
-        highlightOnHover
-        pointerOnHover
-        className="border rounded shadow-sm"
-      />
-
-      <Modal
-        title={editingBatch ? "Edit Batch" : "Add New Batch"}
-        open={isModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-        centered
+   <>
+   {
+    isAllowedTo(permission,["view","viewOwn"])? <div className="p-4">
+    <div className="flex justify-between items-center mb-4">
+      <h2 className="text-xl font-semibold">Batches</h2>
+      {isAllowedTo(permission,["create"])&&<button
+        onClick={handleAddBatch}
+        className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-white hover:text-orange-600 hover:border border-orange-600 transition"
       >
-        <Form form={form} layout="vertical">
-          <Form.Item
-            name="courseName"
-            label="Course Name"
-            rules={[{ required: true, message: "Please select a course name" }]}
-          >
-            <Select placeholder="Select a course">
-              <Option value="Full Stack">Full Stack</Option>
-              <Option value="Digital Marketing">Digital Marketing</Option>
-            </Select>
-          </Form.Item>
+        Add Batch
+      </button>}
+    </div>
 
-          <Form.Item
-            name="batchTimings"
-            label="Batch Timings"
-            rules={[{ required: true, message: "Please select batch timings" }]}
-          >
-            <Select placeholder="Select batch timings">
-              <Option value="10 am to 02 pm">10 am to 02 pm</Option>
-              <Option value="02 pm to 06 pm">02 pm to 06 pm</Option>
-            </Select>
-          </Form.Item>
+    <DataTable
+      columns={columns}
+      data={batches}
+      customStyles={customStyles}
+      pagination
+      highlightOnHover
+      pointerOnHover
+      className="border rounded shadow-sm"
+    />
 
-          <Form.Item
-            name="courseDuration"
-            label="Course Duration"
-            rules={[{ required: true, message: "Please select course duration" }]}
-          >
-            <Select placeholder="Select course duration">
-              <Option value="3 Months">3 Months</Option>
-              <Option value="6 Months">6 Months</Option>
-              <Option value="9 Months">9 Months</Option>
-              <Option value="12 Months">12 Months</Option>
-            </Select>
-          </Form.Item>
+    <Modal
+      title={editingBatch ? "Edit Batch" : "Add New Batch"}
+      open={isModalOpen}
+      onCancel={handleCancel}
+      footer={null}
+      centered
+    >
+      <Form form={form} layout="vertical">
+        <Form.Item
+          name="courseName"
+          label="Course Name"
+          rules={[{ required: true, message: "Please select a course name" }]}
+        >
+          <Select placeholder="Select a course">
+            <Option value="Full Stack">Full Stack</Option>
+            <Option value="Digital Marketing">Digital Marketing</Option>
+          </Select>
+        </Form.Item>
 
-          <Form.Item
-  name="trainer"
-  label="Assign Trainers"
-  // rules={[
-  //   {  message: "Please select at least one trainer." },
-  // ]}
+        <Form.Item
+          name="batchTimings"
+          label="Batch Timings"
+          rules={[{ required: true, message: "Please select batch timings" }]}
+        >
+          <Select placeholder="Select batch timings">
+            <Option value="10 am to 02 pm">10 am to 02 pm</Option>
+            <Option value="02 pm to 06 pm">02 pm to 06 pm</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+          name="courseDuration"
+          label="Course Duration"
+          rules={[{ required: true, message: "Please select course duration" }]}
+        >
+          <Select placeholder="Select course duration">
+            <Option value="3 Months">3 Months</Option>
+            <Option value="6 Months">6 Months</Option>
+            <Option value="9 Months">9 Months</Option>
+            <Option value="12 Months">12 Months</Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item
+name="trainer"
+label="Assign Trainers"
+// rules={[
+//   {  message: "Please select at least one trainer." },
+// ]}
 >
-  <Select
-    mode="multiple"
-    placeholder="Select trainers"
-    value={form.getFieldValue("trainers")}
-    onChange={(value) => form.setFieldsValue({ trainers: value })}
-  >
-    {staffs.map((trainer) => (
-      <Option key={trainer._id} value={trainer._id}>
-        <div className="flex items-center gap-2">
+<Select
+  mode="multiple"
+  placeholder="Select trainers"
+  value={form.getFieldValue("trainers")}
+  onChange={(value) => form.setFieldsValue({ trainers: value })}
+>
+  {staffs.map((trainer) => (
+    <Option key={trainer._id} value={trainer._id}>
+      <div className="flex items-center gap-2">
+        <img
+          src={trainer.profilePic}
+          alt={trainer.fullName}
+          className="w-8 h-8 rounded-full"
+        />
+        {trainer.fullName}
+      </div>
+    </Option>
+  ))}
+</Select>
+</Form.Item>
+      </Form>
+      <div className="flex justify-end items-center gap-1">
+      <button key="cancel" onClick={handleCancel} className="border px-4 py-1 rounded-lg border-gray-300 hover:border-orange-500 hover:text-orange-500 ">
+          Cancel
+        </button>,
+        <button
+          key="submit"
+          type="primary"
+          onClick={handleOk}
+          className="bg-orange-500 px-4 py-1 rounded-lg  text-white hover:bg-orange-600"
+        >
+          {editingBatch ? "Save Changes" : "Add"}
+        </button>
+        </div>
+    </Modal>
+    <Modal
+      title="Batch Details"
+      open={isViewModalOpen}
+      onCancel={handleCancel}
+      footer={null}
+      centered
+    >
+{selectedBatch && (
+<div className="p-6 bg-orange-500 max-w-lg rounded-lg ">
+  {/* Batch Details */}
+  <h2 className="text-2xl font-bold  mb-4">Batch Details</h2>
+  <div className="space-y-3 text-white">
+    <p className="mx-auto">
+      <strong className="text-black">Batch ID:</strong> {selectedBatch.batchId}
+    </p>
+    <p>
+      <strong className="text-black">Batch Name:</strong> {selectedBatch.batchName}
+    </p>
+    <p>
+      <strong className="text-black">Course Name:</strong> {selectedBatch.courseName}
+    </p>
+    <p>
+      <strong className="text-black">Batch Timings:</strong> {selectedBatch.batchTimings}
+    </p>
+    <p>
+      <strong className="text-black">Course Duration:</strong> {selectedBatch.courseDuration}
+    </p>
+  </div>
+
+  {/* Trainers Section */}
+  <div className="mt-6">
+    <h3 className="text-xl font-semibold  mb-3">Trainers</h3>
+    <div className="flex flex-wrap gap-4">
+      {selectedBatch.trainerDetails.map((trainer) => (
+        <div
+          key={trainer._id}
+          className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg shadow-md w-full sm:w-1/2"
+        >
           <img
             src={trainer.profilePic}
-            alt={trainer.fullName}
-            className="w-8 h-8 rounded-full"
+            alt={`${trainer.fullName}'s profile`}
+            className="w-12 h-12 rounded-full border-2 border-orange-600"
           />
-          {trainer.fullName}
+          <span className="text-sm font-medium text-gray-800">{trainer.fullName}</span>
         </div>
-      </Option>
-    ))}
-  </Select>
-</Form.Item>
-        </Form>
-        <div className="flex justify-end items-center gap-1">
-        <button key="cancel" onClick={handleCancel} className="border px-4 py-1 rounded-lg border-gray-300 hover:border-orange-500 hover:text-orange-500 ">
-            Cancel
-          </button>,
-          <button
-            key="submit"
-            type="primary"
-            onClick={handleOk}
-            className="bg-orange-500 px-4 py-1 rounded-lg  text-white hover:bg-orange-600"
-          >
-            {editingBatch ? "Save Changes" : "Add"}
-          </button>
-          </div>
-      </Modal>
-      <Modal
-        title="Batch Details"
-        open={isViewModalOpen}
-        onCancel={handleCancel}
-        footer={null}
-        centered
-      >
-  {selectedBatch && (
-  <div className="p-6 bg-orange-500 max-w-lg rounded-lg ">
-    {/* Batch Details */}
-    <h2 className="text-2xl font-bold  mb-4">Batch Details</h2>
-    <div className="space-y-3 text-white">
-      <p className="mx-auto">
-        <strong className="text-black">Batch ID:</strong> {selectedBatch.batchId}
-      </p>
-      <p>
-        <strong className="text-black">Batch Name:</strong> {selectedBatch.batchName}
-      </p>
-      <p>
-        <strong className="text-black">Course Name:</strong> {selectedBatch.courseName}
-      </p>
-      <p>
-        <strong className="text-black">Batch Timings:</strong> {selectedBatch.batchTimings}
-      </p>
-      <p>
-        <strong className="text-black">Course Duration:</strong> {selectedBatch.courseDuration}
-      </p>
-    </div>
-
-    {/* Trainers Section */}
-    <div className="mt-6">
-      <h3 className="text-xl font-semibold  mb-3">Trainers</h3>
-      <div className="flex flex-wrap gap-4">
-        {selectedBatch.trainerDetails.map((trainer) => (
-          <div
-            key={trainer._id}
-            className="flex items-center gap-3 bg-gray-50 p-3 rounded-lg shadow-md w-full sm:w-1/2"
-          >
-            <img
-              src={trainer.profilePic}
-              alt={`${trainer.fullName}'s profile`}
-              className="w-12 h-12 rounded-full border-2 border-orange-600"
-            />
-            <span className="text-sm font-medium text-gray-800">{trainer.fullName}</span>
-          </div>
-        ))}
-      </div>
+      ))}
     </div>
   </div>
+</div>
 )}
 
-        
-      </Modal>
-    </div>
+      
+    </Modal>
+  </div>:<UnauthorizedAccess/>
+   }
+   </>
   );
 };
 
