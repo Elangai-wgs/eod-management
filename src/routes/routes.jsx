@@ -12,10 +12,21 @@ import HomePage from "../Panel/Common/HomePage";
 import AddCompany from "../Panel/MainPages/AddCompany";
 import AddDesignation from "../Panel/MainPages/AddDesignation";
 import AddRole from "../Panel/MainPages/AddRole";
+import Attendance from "../Panel/MainPages/Attendance";
 import Batches from "../Panel/MainPages/Batches";
+import Chat from "../Panel/MainPages/Chat/Chat";
 import Course from "../Panel/MainPages/Course"
 import Dashboard from "../Panel/MainPages/Dashboard";
+import Leave from "../Panel/MainPages/Leave";
+import MonthlyPayroll from "../Panel/MainPages/MonthlyPayroll";
+import Notifications from "../Panel/MainPages/Notifications";
+import Payroll from "../Panel/MainPages/Payroll";
+import SalaryConfig from "../Panel/MainPages/SalaryConfig/SalaryConfig";
+import Schedule from "../Panel/MainPages/Schedule";
 import Staffs from "../Panel/MainPages/Staffs";
+import SuperEod from "../Panel/MainPages/SuperEod";
+import SuperReports from "../Panel/MainPages/SuperReport";
+import TrainerAssessment from "../Panel/MainPages/TrainerAssessment";
 import PageNotFound from "../components/PageNotFound";
 import UnauthorizedAccess from "../components/UnauthorizedAccess";
 import Login from "../components/login";
@@ -399,6 +410,92 @@ const routePages = [
                 key:"staff",
                 element: <Staffs/>,
                 path: "staff",
+                access: ["close"],
+              },
+              
+              {
+                title: "Assessment",
+                key:"Assessment",
+                element: <TrainerAssessment/>,
+                path: "assessment",
+                access: ["close"],
+              },
+              {
+                title: "Attendance",
+                key:"Attendance",
+                element: <Attendance/>,
+                path: "attendance",
+                access: ["close"],
+              },
+              {
+                title: "Attendance",
+                key:"Attendance",
+                element: <Attendance/>,
+                path: "attendance",
+                access: ["close"],
+              },
+              {
+                title: "Chat",
+                key:"chat",
+                element: <Chat/>,
+                path: "chat",
+                access: ["close"],
+              },
+              {
+                title: "EOD",
+                key:"eod",
+                element: <SuperEod/>,
+                path: "eod",
+                access: ["close"],
+              },
+              {
+                title: "Leave",
+                key:"leave",
+                element: <Leave/>,
+                path: "leave",
+                access: ["close"],
+              },
+              {
+                title: "Monthly Payroll",
+                key:"monthlyPayroll",
+                element: <MonthlyPayroll/>,
+                path: "monthlyPayroll",
+                access: ["close"],
+              },
+              {
+                title: "notifications",
+                key:"notifications",
+                element: <Notifications/>,
+                path: "notication",
+                access: ["close"],
+              },
+              {
+                title: "Payroll",
+                key:"payroll",
+                element: <Payroll/>,
+                path: "payroll",
+                access: ["close"],
+              },
+              {
+                title: "report",
+                key:"report",
+                element: <SuperReports/>,
+                path: "report",
+                access: ["close"],
+              },
+
+              {
+                title: "Config",
+                key:"config",
+                element: <SalaryConfig/>,
+                path: "config",
+                access: ["close"],
+              },
+              {
+                title: "Schedule",
+                key:"schedule",
+                element: <Schedule/>,
+                path: "schedule",
                 access: ["close"],
               },
               
