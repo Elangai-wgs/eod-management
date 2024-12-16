@@ -33,6 +33,15 @@ const AddRole = () => {
       ],
       GrantedPermission: [],
     },
+    company: {
+      title: "company Management",
+      checkBoxs: [
+        { title: "Create", value: "create" },
+        { title: "Manage", value: "manage" },
+        { title: "View", value: "view" },
+      ],
+      GrantedPermission: [],
+    },
     staffs: {
       title: "Employee Management",
       checkBoxs: [
@@ -66,7 +75,7 @@ const AddRole = () => {
       ],
       GrantedPermission: [],
     },
-    assesment: {
+    assessment: {
       title: "Assessment Management",
       checkBoxs: [
         { title: "Create", value: "create" },
@@ -110,7 +119,7 @@ const AddRole = () => {
       ],
       GrantedPermission: [],
     },
-    shedule: {
+    schedule: {
       title: "Schedule Management",
       checkBoxs: [
         { title: "Create", value: "create" },
@@ -136,7 +145,7 @@ const AddRole = () => {
       title: "Leave Management",
       checkBoxs: [
         { title: "Request", value: "request" },
-        { title: "Approve", value: "aprove" },
+        { title: "Approve", value: "approve" },
         { title: "Manage", value: "manage" },
         { title: "View", value: "view" },
         { title: "View Own", value: "viewOwn" },
