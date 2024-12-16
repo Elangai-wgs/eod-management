@@ -3,7 +3,7 @@ import { Table, Modal, Button, Form, Input, DatePicker, Space } from "antd";
 import moment from "moment";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa";
 import DataTable from "react-data-table-component";
-import { CreateMonthlyPayroll, DeletePayroll, GetMonthlyPayroll, UpdateMonthlyPayroll } from "../../../../services";
+import { CreateMonthlyPayroll, DeletePayroll, GetMonthlyPayroll, UpdateMonthlyPayroll } from "../../services";
 
 const { MonthPicker } = DatePicker;
 

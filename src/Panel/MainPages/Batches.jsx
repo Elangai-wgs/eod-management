@@ -348,10 +348,12 @@ import {
   AllStaffs,
 } from "../../services";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const { Option } = Select;
 
 const Batches = () => {
+  const permission = useSelector((state)=>state.permission?.batch);
   const [batches, setBatches] = useState([]);
   const [staffs, setStaffs] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -553,12 +555,12 @@ const Batches = () => {
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Batches</h2>
-        <button
+        {permission?.create&&<button
           onClick={handleAddBatch}
           className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-white hover:text-orange-600 hover:border border-orange-600 transition"
         >
           Add Batch
-        </button>
+        </button>}
       </div>
 
       <DataTable

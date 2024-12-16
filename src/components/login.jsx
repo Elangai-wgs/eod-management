@@ -3,12 +3,14 @@ import logo from "../assets/Login/LoginImage.jpg";
 import img1 from "../assets/Login/BrowserLogo.png";
 import { useNavigate } from "react-router-dom";
 import { login } from "../services";
-import { PermissionContext } from "../App";
+// import { PermissionContext } from "../App";
+import { useDispatch } from "react-redux";
 
 
 
 const Login = () => {
-  const {permision,setPermission} = useContext(PermissionContext)
+  const dispatch = useDispatch();
+  const {permission,setPermission} = useContext(PermissionContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [authorityLevel, setAuthorityLevel] = useState("");
@@ -44,20 +46,21 @@ const Login = () => {
               setPassword("");
               setAuthorityLevel(authorityLevel);
               console.log("User Role:", authorityLevel);
-
+              navigate('/dashboard');
+              dispatch(setPermission(response.data.data?.role))
               // Navigate based on authority level
-              if (authorityLevel === "High") {
-                navigate("/sidebar/dashboard");
-              } else if (authorityLevel === "Medium") {
-                navigate("/admin");
-              } else if (authorityLevel === "medium") {
-                navigate("/trainersidebar/dashboard");
-              } 
-              else if (authorityLevel === "Low") {
-                navigate("/traineesidebar/dashboard");
-              } else {
-                navigate("/");
-              }
+              // if (authorityLevel === "High") {
+              //   navigate("/sidebar/dashboard");
+              // } else if (authorityLevel === "Medium") {
+              //   navigate("/admin");
+              // } else if (authorityLevel === "medium") {
+              //   navigate("/trainersidebar/dashboard");
+              // } 
+              // else if (authorityLevel === "Low") {
+              //   navigate("/traineesidebar/dashboard");
+              // } else {
+              //   navigate("/");
+              // }
             } else {
               alert(response.message || "Invalid credentials");
             }

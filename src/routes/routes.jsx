@@ -374,8 +374,8 @@ const routePages = [
                 title: "Batches",
                 key:"batch",
                 element: <Batches/>,
-                path: "Batches",
-                access: ["close"],
+                path: "batches",
+                access: ["open"],
               },
               {
                 title: "Syllabus",

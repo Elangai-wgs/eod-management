@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { GetConfig, UpdateConfig } from "../../../../services";
+import { GetConfig, UpdateConfig } from "../../../services";
 
 const InputField = ({
   label,

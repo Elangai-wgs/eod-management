@@ -2,7 +2,7 @@ import { DatePicker, Modal, Tabs, Button, Select } from "antd";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FaEye } from "react-icons/fa";
-import { GetLeavesRequests, SendLeaveRequest, UpdateLeaveStatus } from "../../../../services"; // Assuming UpdateLeaveStatus service is implemented
+import { GetLeavesRequests, SendLeaveRequest, UpdateLeaveStatus } from "../../services"; // Assuming UpdateLeaveStatus service is implemented
 import dayjs from "dayjs";
 
 const { RangePicker } = DatePicker;

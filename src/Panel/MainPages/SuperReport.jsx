@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { FaEye, FaTrash, FaReply } from "react-icons/fa";
 import { Button, Modal, Input } from "antd";
-import { GetReportAll, replyReport } from "../../../../services";
+import { GetReportAll, replyReport } from "../../services";
 
 const { TextArea } = Input;
 

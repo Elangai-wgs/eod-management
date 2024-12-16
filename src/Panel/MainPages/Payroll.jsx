@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DatePicker } from "antd";
 import dayjs from "dayjs";
-import { downloadPaySlip, GetInitialPayrollData, GetLeaveDetails, GetPaySlipDetails } from "../../../../services";
+import { downloadPaySlip, GetInitialPayrollData, GetLeaveDetails, GetPaySlipDetails } from "../../services";
 import { useNavigate } from "react-router-dom";
 
 const LeaveDetailLoading = () => {
