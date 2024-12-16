@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { FaTachometerAlt } from "react-icons/fa";
-import { Navbar } from "../../components/navbar";
+// import { Navbar } from "./Navbar";
+import logo from "../../assets/Login/NavbarLogo.png";
 
 const generateMenu = (menubarData) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -45,7 +46,7 @@ const generateMenu = (menubarData) => {
 };
 
 const CommonSideBar = () => {
-  const permissions = { dashboard: [], admin: [] };
+  const permissions = { dashboard: [], batch: [] };
 
   const sidebarMenus = [
     {
@@ -170,7 +171,9 @@ const CommonSideBar = () => {
     const allowedMenus = Object.keys(permissions);
     return allowedMenus.includes(key);
   };
-  const allowedSidebarMenus = sidebarMenus.filter((menubarData)=>isThisMenuAllowed(menubarData.key))
+  const allowedSidebarMenus = sidebarMenus.filter((menubarData) =>
+    isThisMenuAllowed(menubarData.key)
+  );
   return (
     <div className="flex h-screen">
       <div
@@ -184,13 +187,9 @@ const CommonSideBar = () => {
             Why Global Services
           </h2>
         </div>
-        {allowedSidebarMenus.map((sidebarMenuData)=>(generateMenu(sidebarMenuData)))}
-        <div className="flex-1 h-screen ml-64 py-1  ">
-                <Navbar />
-                <div className="mt-4">
-                  <Outlet />
-                </div>
-              </div>
+        {allowedSidebarMenus.map((sidebarMenuData) =>
+          generateMenu(sidebarMenuData)
+        )}
       </div>
     </div>
   );

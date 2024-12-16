@@ -3,8 +3,10 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { pages } from "./routes";
 // import { PageNotFound } from "../components/notfound";
 // import { UnauthorizedAccess } from "../components/unauthorized";
-import { Navbar } from "../components/navbar";
-import { Footer } from "../components/footer";
+// import { Navbar } from "../Panel/Common/Navbar";
+// import { Footer } from "../components/footer";
+import CommonSideBar from "../Panel/Common/CommonSideBar";
+import HomePage from "../Panel/Common/HomePage";
 
 
 const isAllowed = (access = []) => {
@@ -75,5 +77,8 @@ export function Routers() {
     return <Route key={title} path={path} element={element} />;
   });
 
-  return <Routes>{pageRoutes}</Routes>;
+  return <Routes>{pageRoutes}
+   <Route key={"sdsd"} path={"/hello"} element={<HomePage/>} />
+
+  </Routes>;
 }
