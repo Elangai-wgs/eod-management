@@ -10,6 +10,7 @@
 
 import Batches from "../Panel/MainPages/Batches";
 import Course from "../Panel/MainPages/Course"
+import PageNotFound from "../components/PageNotFound";
 import UnauthorizedAccess from "../components/UnauthorizedAccess";
 import Login from "../components/login";
 
@@ -312,7 +313,7 @@ import Login from "../components/login";
 const routePages = [
     {
         title: "Page Not Found",
-        element: <Page />,
+        element: <PageNotFound />,
         path: "page_not_found",
         access: ["open"],
     },
@@ -328,119 +329,119 @@ const routePages = [
       path: "Unauthorized",
       access: ["open"],
     },
-    {
-      title: "ResetPassword",
-      element: <ResetPassword />,
-      path: "resetpassword",
-      access: ["open"],
-    },
+    // {
+    //   title: "ResetPassword",
+    //   element: <ResetPassword />,
+    //   path: "resetpassword",
+    //   access: ["open"],
+    // },
 
-    {
-        title: "Home",
-        element: <HomePage />,
-        path: "/",
-        access: ["open"],
-        nestedRoutes:[
-            {
-                title: "Dashboard",
-                key:"dashboard",
-                element: <Dashboard/>,
-                path: "dashboard",
-                access: ["open"],
-              },
-              {
-                title: "Batches",
-                key:"batch",
-                element: <Batches/>,
-                path: "Batches",
-                access: ["close"],
-              },
-              {
-                title: "Courses",
-                element: <Course/>,
-                path: "buttons",
-                access: ["open"],
-              },
-              {
-                title: "Staff",
-                element: <TableExample />,
-                path: "tableExample",
-                access: ["open"],
-              },
-              {
-                title: "Profile",
-                element: <Profile />,
-                path: "Profile",
-                access: ["open"],
-              },
-              {
-                title: "ManageAdmin",
-                element: <ManageAdmin  />,
-                path: "manageadmin",
-                access: ["open"],
-              },
-              {
-                title: "ManageUser",
-                element: <Manageuser />,
-                path: "manageuser",
-                access: ["open"],
-              },
-              {
-                title: "ManageHub",
-                element: <ManageHub />,
-                path: "managehub",
-                access: ["open"],
-              },
-              {
-                title: "ManageDeliveryperson",
-                element: <ManageDeliveryperson />,
-                path: "managedeliveryperson",
-                access: ["open"],
-              },
-              {
-                title: "ManageServices",
-                element: <ManageServices />,
-                path: "manageServices",
-                access: ["open"],
-              },
-              {
-                title: "CustomTable",
-                element: <CustomTable />,
-                path: "customTable",
-                access: ["open"],
-              },
-              {
-                title: "Manage Price",
-                element: <ManagePrice />,
-                path: "Price",
-                access: ["open"],
-              },
-              {
-                title: "ManageOrders",
-                element: <ManageOrders />,
-                path: "manageOrders",
-                access: ["open"],
-              },
-              {
-                title: "Bag",
-                element: <DeliveryBag />,
-                path: "deliveryBag",
-                access: ["open"],
-              },
-              {
-                title: "CustomTab",
-                element: <CustomTab />,
-                path: "CustomTab",
-                access: ["open"],
-              },
-              {
-                title: "Charges",
-                element: <ManageCharges />,
-                path: "charges",
-                access: ["open"],
-              },
-        ]
-    }
+    // {
+    //     title: "Home",
+    //     element: <HomePage />,
+    //     path: "/",
+    //     access: ["open"],
+    //     nestedRoutes:[
+    //         {
+    //             title: "Dashboard",
+    //             key:"dashboard",
+    //             element: <Dashboard/>,
+    //             path: "dashboard",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "Batches",
+    //             key:"batch",
+    //             element: <Batches/>,
+    //             path: "Batches",
+    //             access: ["close"],
+    //           },
+    //           {
+    //             title: "Courses",
+    //             element: <Course/>,
+    //             path: "buttons",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "Staff",
+    //             element: <TableExample />,
+    //             path: "tableExample",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "Profile",
+    //             element: <Profile />,
+    //             path: "Profile",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "ManageAdmin",
+    //             element: <ManageAdmin  />,
+    //             path: "manageadmin",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "ManageUser",
+    //             element: <Manageuser />,
+    //             path: "manageuser",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "ManageHub",
+    //             element: <ManageHub />,
+    //             path: "managehub",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "ManageDeliveryperson",
+    //             element: <ManageDeliveryperson />,
+    //             path: "managedeliveryperson",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "ManageServices",
+    //             element: <ManageServices />,
+    //             path: "manageServices",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "CustomTable",
+    //             element: <CustomTable />,
+    //             path: "customTable",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "Manage Price",
+    //             element: <ManagePrice />,
+    //             path: "Price",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "ManageOrders",
+    //             element: <ManageOrders />,
+    //             path: "manageOrders",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "Bag",
+    //             element: <DeliveryBag />,
+    //             path: "deliveryBag",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "CustomTab",
+    //             element: <CustomTab />,
+    //             path: "CustomTab",
+    //             access: ["open"],
+    //           },
+    //           {
+    //             title: "Charges",
+    //             element: <ManageCharges />,
+    //             path: "charges",
+    //             access: ["open"],
+    //           },
+    //     ]
+    // }
 ]
 
 

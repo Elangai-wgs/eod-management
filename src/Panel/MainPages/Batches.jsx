@@ -346,7 +346,7 @@ import {
   EditBatches,
   DeleteBatches,
   AllStaffs,
-} from "../../../../services";
+} from "../../services";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 
 const { Option } = Select;
