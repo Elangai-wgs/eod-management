@@ -33,8 +33,28 @@ const AddRole = () => {
       ],
       GrantedPermission: [],
     },
+    company: {
+      title: "company Management",
+      checkBoxs: [
+        { title: "Create", value: "create" },
+        { title: "Manage", value: "manage" },
+        { title: "View", value: "view" },
+      ],
+      GrantedPermission: [],
+    },
     staffs: {
       title: "Employee Management",
+      checkBoxs: [
+        { title: "Create", value: "create" },
+        { title: "Manage", value: "manage" },
+        { title: "Manage Own", value: "manageOwn" },
+        { title: "View", value: "view" },
+        { title: "View Own", value: "viewOwn" },
+      ],
+      GrantedPermission: [],
+    },
+    attendance: {
+      title: "Attendance Management",
       checkBoxs: [
         { title: "Create", value: "create" },
         { title: "Manage", value: "manage" },
@@ -55,8 +75,8 @@ const AddRole = () => {
       ],
       GrantedPermission: [],
     },
-    assesment: {
-      title: "Assesment Management",
+    assessment: {
+      title: "Assessment Management",
       checkBoxs: [
         { title: "Create", value: "create" },
         { title: "Manage", value: "manage" },
@@ -99,8 +119,8 @@ const AddRole = () => {
       ],
       GrantedPermission: [],
     },
-    shedule: {
-      title: "Shedule Management",
+    schedule: {
+      title: "Schedule Management",
       checkBoxs: [
         { title: "Create", value: "create" },
         { title: "Manage", value: "manage" },
@@ -125,7 +145,7 @@ const AddRole = () => {
       title: "Leave Management",
       checkBoxs: [
         { title: "Request", value: "request" },
-        { title: "Aprove", value: "aprove" },
+        { title: "Approve", value: "approve" },
         { title: "Manage", value: "manage" },
         { title: "View", value: "view" },
         { title: "View Own", value: "viewOwn" },
@@ -142,7 +162,15 @@ const AddRole = () => {
       ],
       GrantedPermission: [],
     },
-
+    monthlyPayroll: {
+      title: "Monthly Payroll Management",
+      checkBoxs: [
+        { title: "Create", value: "create" },
+        { title: "Manage", value: "manage" },
+        { title: "View", value: "view" },
+      ],
+      GrantedPermission: [],
+    },
     report: {
       title: "Report Management",
       checkBoxs: [
