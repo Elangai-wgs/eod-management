@@ -6,7 +6,7 @@ import {
   DeleteRole,
   GetRole,
   UpdateRole,
-} from "../../../../services";
+} from "../../services";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { Popover, Checkbox } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
@@ -22,6 +22,17 @@ const AddRole = () => {
   const [form] = Form.useForm();
   const initialState = {
     roleName: "",
+    admin: {
+      title: "Admin Management",
+      checkBoxs: [
+        { title: "Create", value: "create" },
+        { title: "Manage", value: "manage" },
+        { title: "Manage Own", value: "manageOwn" },
+        { title: "View", value: "view" },
+        { title: "View Own", value: "viewOwn" },
+      ],
+      GrantedPermission: [],
+    },
     company: {
       title: "company Management",
       checkBoxs: [

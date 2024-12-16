@@ -8,8 +8,14 @@
 // //   },
 // // ];
 
+import HomePage from "../Panel/Common/HomePage";
+import AddCompany from "../Panel/MainPages/AddCompany";
+import AddDesignation from "../Panel/MainPages/AddDesignation";
+import AddRole from "../Panel/MainPages/AddRole";
 import Batches from "../Panel/MainPages/Batches";
 import Course from "../Panel/MainPages/Course"
+import Dashboard from "../Panel/MainPages/Dashboard";
+import Staffs from "../Panel/MainPages/Staffs";
 import PageNotFound from "../components/PageNotFound";
 import UnauthorizedAccess from "../components/UnauthorizedAccess";
 import Login from "../components/login";
@@ -313,20 +319,23 @@ import Login from "../components/login";
 const routePages = [
     {
         title: "Page Not Found",
+        key: "page-not-found",
         element: <PageNotFound />,
-        path: "page_not_found",
+        path: "page-not-found",
         access: ["open"],
     },
     {
         title: "Login",
+        key: "login",
         element: <Login/>,
         path: "login",
         access: ["open"],
     },
     {
       title: "Unauthorized",
+      key: "unauthorized",
       element: <UnauthorizedAccess/>,
-      path: "Unauthorized",
+      path: "unauthorized",
       access: ["open"],
     },
     // {
@@ -336,112 +345,65 @@ const routePages = [
     //   access: ["open"],
     // },
 
-    // {
-    //     title: "Home",
-    //     element: <HomePage />,
-    //     path: "/",
-    //     access: ["open"],
-    //     nestedRoutes:[
-    //         {
-    //             title: "Dashboard",
-    //             key:"dashboard",
-    //             element: <Dashboard/>,
-    //             path: "dashboard",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "Batches",
-    //             key:"batch",
-    //             element: <Batches/>,
-    //             path: "Batches",
-    //             access: ["close"],
-    //           },
-    //           {
-    //             title: "Courses",
-    //             element: <Course/>,
-    //             path: "buttons",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "Staff",
-    //             element: <TableExample />,
-    //             path: "tableExample",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "Profile",
-    //             element: <Profile />,
-    //             path: "Profile",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "ManageAdmin",
-    //             element: <ManageAdmin  />,
-    //             path: "manageadmin",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "ManageUser",
-    //             element: <Manageuser />,
-    //             path: "manageuser",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "ManageHub",
-    //             element: <ManageHub />,
-    //             path: "managehub",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "ManageDeliveryperson",
-    //             element: <ManageDeliveryperson />,
-    //             path: "managedeliveryperson",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "ManageServices",
-    //             element: <ManageServices />,
-    //             path: "manageServices",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "CustomTable",
-    //             element: <CustomTable />,
-    //             path: "customTable",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "Manage Price",
-    //             element: <ManagePrice />,
-    //             path: "Price",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "ManageOrders",
-    //             element: <ManageOrders />,
-    //             path: "manageOrders",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "Bag",
-    //             element: <DeliveryBag />,
-    //             path: "deliveryBag",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "CustomTab",
-    //             element: <CustomTab />,
-    //             path: "CustomTab",
-    //             access: ["open"],
-    //           },
-    //           {
-    //             title: "Charges",
-    //             element: <ManageCharges />,
-    //             path: "charges",
-    //             access: ["open"],
-    //           },
-    //     ]
-    // }
+    {
+        title: "Home",
+        key: "home",
+        element: <HomePage />,
+        path: "/",
+        access: ["open"],
+        nestedRoutes:[
+            {
+                title: "Dashboard",
+                key:"dashboard",
+                element: <Dashboard/>,
+                path: "dashboard",
+                access: ["close"],
+              },
+              {
+                title: "Batches",
+                key:"batch",
+                element: <Batches/>,
+                path: "Batches",
+                access: ["close"],
+              },
+              {
+                title: "Syllabus",
+                key:"syllabus",
+                element: <Course/>,
+                path: "syllabus",
+                access: ["close"],
+              },
+              {
+                title: "Role",
+                key:"role",
+                element: <AddRole/>,
+                path: "role",
+                access: ["close"],
+              },
+              {
+                title: "Company",
+                key:"company",
+                element: <AddCompany/>,
+                path: "company",
+                access: ["close"],
+              },
+              {
+                title: "Designation",
+                key:"designation",
+                element: <AddDesignation/>,
+                path: "designation",
+                access: ["close"],
+              },
+              {
+                title: "Staff",
+                key:"staff",
+                element: <Staffs/>,
+                path: "staff",
+                access: ["close"],
+              },
+              
+        ]
+    }
 ]
 
 
