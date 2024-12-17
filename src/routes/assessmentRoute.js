@@ -5,7 +5,7 @@ const uploads = require('../middlewares/multer');
 
 
 const Router = express.Router();
-// Router.use(verifyAuthToken);
+Router.use(verifyAuthToken);
 
 Router.route('/createAssessment').post(uploads.single('mediaUrl'),assessmentController.createAssessment);
 Router.route('/getAssessmentAll').get(assessmentController.getAssessmentAll);

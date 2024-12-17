@@ -118,9 +118,10 @@ exports.getTraineeAll = async(req)=>{
 
     const { role } = user;
 
-    if (!role || !role.trainee || !role.trainee.includes('viewOwn')) {
+    if (!role || !role.trainee || !['create', 'manage', 'manageOwn', 'view', 'viewOwn'].some(permission => role.trainee.includes(permission))) {
         throw new ApiError(httpStatus.FORBIDDEN, { message: "You do not have permission to view attendance" });
-    }
+      }
+      
 
     const trainee = await TraineeModel.find({})
     if (!trainee) {

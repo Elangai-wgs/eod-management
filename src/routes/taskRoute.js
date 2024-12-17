@@ -1,8 +1,10 @@
 const express = require('express');
 const taskController = require("../controller/taskController");
 const uploads = require("../middlewares/multer");
+const { verifyAuthToken } = require('../middlewares/jwt.config');
 
 const Router = express.Router();
+Router.use(verifyAuthToken);
 
 Router.route("/createTask").post(taskController.createTask);
 Router.route("/getTaskAll").get(taskController.getTaskAll);
