@@ -527,6 +527,9 @@ const Batches = () => {
           >
             <FaEye />
           </Button>
+         
+         {
+         isAllowedTo(permission,["manage"])&&(<>
           <Button
             onClick={() => handleEditBatch(row)}
             className="border border-blue-500 text-blue-500 px-2"
@@ -539,6 +542,8 @@ const Batches = () => {
           >
             <FaTrash />
           </Button>
+          </>
+          )}
         </div>
       ),
     },

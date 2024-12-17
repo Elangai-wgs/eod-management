@@ -4,10 +4,14 @@ import moment from "moment";
 import { FaEye, FaPen, FaTrash } from "react-icons/fa";
 import DataTable from "react-data-table-component";
 import { CreateMonthlyPayroll, DeletePayroll, GetMonthlyPayroll, UpdateMonthlyPayroll } from "../../services";
+import { isAllowedTo } from "../../utils/utils";
+import { useSelector } from "react-redux";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const { MonthPicker } = DatePicker;
 
 const MonthlyPayroll = () => {
+const permission = useSelector((state)=>state.Permissions?.monthlyPayroll)
   const [payrolls, setPayrolls] = useState([]);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -129,7 +133,9 @@ const MonthlyPayroll = () => {
       center: true,
       cell: (row) => (
         <div className="flex gap-2">
-          <Button
+          {
+            isAllowedTo(permission,["manage"])&&(<>
+            <Button
             onClick={() => openModal(row)}
             className="border border-green-500 text-green-500 px-2"
           >
@@ -141,7 +147,7 @@ const MonthlyPayroll = () => {
             className="border border-red-500 text-red-500 px-2"
           >
             <FaTrash />
-          </Button>
+          </Button></>)}
         </div>
       ),
     },
@@ -161,17 +167,21 @@ const MonthlyPayroll = () => {
   useEffect(()=>{handelFetch()},[]);
 
   return (
+    <>
+    {
+      isAllowedTo(permission,["view"])?
+    
     <div className="p-6">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold w-">Monthly Payroll Management</h1>
-        <button
+       {isAllowedTo(permission,["create"])&&<button
           onClick={() => {
             openModal();
           }}
           className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-white hover:text-orange-600 hover:border border-orange-600 transition"
         >
           + Add Payroll
-        </button>
+        </button>}
       </div>
 
       <DataTable
@@ -241,7 +251,9 @@ const MonthlyPayroll = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </div>:<UnauthorizedAccess/>
+}
+</>
   );
 };
 

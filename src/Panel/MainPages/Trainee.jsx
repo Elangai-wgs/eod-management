@@ -16,8 +16,12 @@ import { UploadOutlined } from "@ant-design/icons";
 import { AddTrainee, GetBatches, GetTrainee, EditTrainee, DeleteTrainee } from "../../services";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 import moment from 'moment'
+import { useSelector } from "react-redux";
+import { isAllowedTo } from "../../utils/utils";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const Trainee = () => {
+  const permission= useSelector((state)=>state.Permissions?.trainee);
   const [batchFilter, setBatchFilter] = useState("");
   const [nameFilter, setNameFilter] = useState("");
   const [students, setStudents] = useState([]);
@@ -169,12 +173,14 @@ console.log(students);
           <button onClick={() => handleView(row._id)} className="text-blue-500">
             <FaEye size={16} />
           </button>
-          <button onClick={() => handleEdit(row)} className="text-orange-500">
+       {isAllowedTo(permission,["manage"])&&  (<> <button onClick={() => handleEdit(row)} className="text-orange-500">
             <FaEdit size={16} />
           </button>
           <button onClick={() => handleDelete(row._id)} className="text-red-500">
             <FaTrash size={16} />
           </button>
+          </>
+          )}
         </div>
       ),
       center: true,
@@ -182,7 +188,9 @@ console.log(students);
   ];
 
   return (
-    <div className="p-6">
+    <>
+    {
+      isAllowedTo(permission,["view","viewOwn"])?<div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <div className="flex gap-4">
           <select
@@ -205,12 +213,12 @@ console.log(students);
             onChange={(e) => setNameFilter(e.target.value)}
           />
         </div>
-        <button
+       {isAllowedTo(permission,["create"])&&<button
           onClick={handleAddStudent}
           className="bg-orange-500 text-white px-6 py-2 rounded-lg hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-400"
         >
           Add Student
-        </button>
+        </button>}
       </div>
 
       <DataTable
@@ -627,7 +635,9 @@ console.log(students);
         )}
       
       </Modal>
-    </div>
+    </div>:<UnauthorizedAccess/>
+}
+</>
   );
 };
 

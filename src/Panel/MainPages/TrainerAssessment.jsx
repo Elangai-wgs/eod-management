@@ -10,10 +10,14 @@ import {
   GetBatches,
 } from "../../services";
 import { UploadOutlined } from "@ant-design/icons";
+import { useSelector } from "react-redux";
+import { isAllowedTo } from "../../utils/utils";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const { Option } = Select;
 
 const TrainerAssessment = () => {
+  const permission = useSelector((state)=>state.Permissions?.assesment)
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [batches, setBatches] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
@@ -150,10 +154,13 @@ const TrainerAssessment = () => {
       name: "Actions",
       cell: (row) => (
         <div className="flex space-x-4 text-lg">
+          
           <FaEye
             className="text-green-500 cursor-pointer"
             onClick={() => handleView(row)}
           />
+          {isAllowedTo(permission,["manage"])&&(
+<>
           <FaEdit
             className="text-yellow-500 cursor-pointer"
             onClick={() => handleEdit(row)}
@@ -162,6 +169,8 @@ const TrainerAssessment = () => {
             className="text-red-500 cursor-pointer"
             onClick={() => handleDeleteAssessment(row._id)}
           />
+  </>
+          )}
         </div>
       ),
       ignoreRowClick: true,
@@ -257,8 +266,11 @@ const TrainerAssessment = () => {
   };
 
   return (
+    <>
+    {
+      isAllowedTo(permission,["view","viewOwn"])?
     <div className="p-4">
-      <button
+     {isAllowedTo(permission,["create"])&& <button
         className="bg-orange-500 px-3 py-1 text-white rounded-lg mb-4"
         onClick={() => {
           setIsModalVisible(true);
@@ -267,7 +279,7 @@ const TrainerAssessment = () => {
         }}
       >
         Add Assessment
-      </button>
+      </button>}
 
       <DataTable
         columns={columns}
@@ -422,7 +434,10 @@ const TrainerAssessment = () => {
     </div>
   )}
 </Modal>
-    </div>
+    </div>:<UnauthorizedAccess/>
+    }
+
+</>
   );
 };
 

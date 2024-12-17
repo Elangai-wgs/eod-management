@@ -23,10 +23,15 @@ import {
   GetRole,
 } from "../../services";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+import { isAllowedTo } from "../../utils/utils";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const { Option } = Select;
 
 const Staffs = () => {
+  const permission = useSelector((state)=>state.Permissions?.staffs);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -78,8 +83,9 @@ const Staffs = () => {
           console.error("Error fetching staff data:", error.message);
         });
     };
-
     fetchStaffData();
+console.log(permission,"permi");
+
   }, []);
 
   useEffect(() => {
@@ -310,7 +316,9 @@ const Staffs = () => {
   };
 
   return (
-    <div className="px-6 py-2">
+   <>
+   {
+    isAllowedTo(permission,["view","viewOwn"])? <div className="px-6 py-2">
       <div className="flex justify-between mb-4">
         <div>
           <input
@@ -321,13 +329,13 @@ const Staffs = () => {
             className="w-full p-1 border border-orange-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
         </div>
-        <button
+        {isAllowedTo(permission,["create"])&&<button
           onClick={handleOpenModal}
           className="flex gap-2 items-center px-3 py-1 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 transition-all duration-200"
         >
           <IoMdAdd className="text-white" />
           Add Staff
-        </button>
+        </button>}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -360,6 +368,8 @@ const Staffs = () => {
                     </button>
 
                     {/* Edit Icon */}
+                    {isAllowedTo(permission,["manage"])&&
+                   ( <>
                     <button
                       className="flex flex-col justify-center items-center w-8 h-8 rounded-full bg-orange-500 text-white hover:bg-white hover:text-orange-500 duration-200"
                       onClick={() => handleEditStaffModal(staff)}
@@ -377,7 +387,7 @@ const Staffs = () => {
                       <span className="text-sm ">
                         <FiTrash size={20} />
                       </span>
-                    </button>
+                    </button></>)}
                   </div>
                 </div>
               </div>
@@ -1055,7 +1065,10 @@ const Staffs = () => {
           </Form>
         )}
       </Modal>
-    </div>
-  );
+    </div>:<UnauthorizedAccess/>
+}
+</>
+
+);
 };
 export default Staffs;

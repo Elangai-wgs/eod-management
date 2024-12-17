@@ -3,6 +3,8 @@ import DataTable from "react-data-table-component";
 import { FaEye, FaTrash, FaReply } from "react-icons/fa";
 import { Button, Modal, Input } from "antd";
 import { GetReportAll, replyReport } from "../../services";
+import { isAllowedTo } from "../../utils/utils";
+import { useSelector } from "react-redux";
 
 const { TextArea } = Input;
 
@@ -13,6 +15,7 @@ const SuperReports = () => {
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState(null);
   const [reply, setReply] = useState("");
+  const permission= useSelector((state)=>state.Permissions?.report)
 
   useEffect(() => {
     const fetchReportsData = async () => {
@@ -98,6 +101,8 @@ const SuperReports = () => {
             title="View Report"
             onClick={() => showViewModal(row)}
           />
+       {
+        isAllowedTo(permission,["manage"])&&(<>   
           <FaTrash
             className="text-red-500 cursor-pointer"
             title="Delete Report"
@@ -108,6 +113,8 @@ const SuperReports = () => {
             title="Reply to Report"
             onClick={() => showReplyModal(row)} 
           />
+          </>
+          )}
         </div>
       ),
       center: true,

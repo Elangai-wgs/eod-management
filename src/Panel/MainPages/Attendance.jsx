@@ -6,9 +6,15 @@ import FileSaver from "file-saver";
 import ExportJsonExcel from "js-export-excel";
 import { Modal } from "antd";
 import { IoMdCloudDownload } from "react-icons/io";
+import { isAllowedTo } from "../../utils/utils";
+import { useSelector } from "react-redux";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 
 const Attendance = () => {
+ 
+ 
+ const permission= useSelector((state)=>state.Permissions?.attendance)
   const todayDate = new Date().toISOString().split("T")[0];
 
   const [attendanceData, setAttendanceData] = useState([]);
@@ -250,7 +256,8 @@ const Attendance = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="container mx-auto p-4">
+    <>
+    {isAllowedTo(permission,["view","viewOwn"])? <div className="container mx-auto p-4">
       <div className="flex justify-around items-center mb-4">
         <select
           value={selectedRole}
@@ -330,7 +337,9 @@ const Attendance = () => {
         </div>
       </Modal>
 
-    </div>
+    </div>:<UnauthorizedAccess/>
+}
+</>
   );
 };
 

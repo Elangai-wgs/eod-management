@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Select, DatePicker, Input, Pagination, message, Modal } from "antd";
 import dayjs from "dayjs";
 import { GetDeparment, GetEodAll } from "../../services";
+import { useSelector } from "react-redux";
+import { isAllowedTo } from "../../utils/utils";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const { Option } = Select;
 
@@ -17,7 +20,7 @@ const SuperEod = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [visibleDetailedEod, setVisibleDetailedEod] = useState(false);
   const [selectedEod, setSelectedEod] = useState([]);
-
+const permission = useSelector((state)=> state.Permissions?.eod)
   const itemsPerPage = 9;
 
   const showDetailedModal = () => {
@@ -104,7 +107,8 @@ const SuperEod = () => {
 
   return (
     <>
-    <div className="p-6 space-y-4">
+    {
+      isAllowedTo(permission,["view","viewOwn"])?<div className="p-6 space-y-4">
       {/* Filters */}
       <div className="flex flex-wrap gap-4">
         {/* Department Filter */}
@@ -206,7 +210,6 @@ const SuperEod = () => {
         onChange={(page) => setCurrentPage(page)}
         className="text-center mt-4"
       />
-    </div>
     <Modal
   open={visibleDetailedEod}
   onCancel={cancelDetailedModal}
@@ -302,9 +305,13 @@ const SuperEod = () => {
     )}
   </div>
 </Modal>
+</div>:<UnauthorizedAccess/>
+    }
 
     </>
   );
 };
 
 export default SuperEod;
+
+

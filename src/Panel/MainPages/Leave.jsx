@@ -4,6 +4,9 @@ import DataTable from "react-data-table-component";
 import { FaEye } from "react-icons/fa";
 import { GetLeavesRequests, SendLeaveRequest, UpdateLeaveStatus } from "../../services"; // Assuming UpdateLeaveStatus service is implemented
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+import { isAllowedTo } from "../../utils/utils";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -36,18 +39,18 @@ const Leave = () => {
       sortable: true,
       center: true,
     },
-    {
-      name: "Emp Id",
-      selector: (row) => row?.userId.logId,
-      sortable: true,
-      center: true,
-    },
-    {
-      name: "Name",
-      selector: (row) => row?.userId.fullName,
-      sortable: true,
-      center: true,
-    },
+    // {
+    //   name: "Emp Id",
+    //   selector: (row) => row?.userId.logId,
+    //   sortable: true,
+    //   center: true,
+    // },
+    // {
+    //   name: "Name",
+    //   selector: (row) => row?.userId.fullName,
+    //   sortable: true,
+    //   center: true,
+    // },
     {
       name: "Type",
       selector: (row) => row?.leaveType,
@@ -83,7 +86,7 @@ const Leave = () => {
           >
             <FaEye />
           </Button>
-           {(Date(row.startDate)>todayDate && activeTab!==1) && <Select
+           {(Date(row.startDate)>todayDate && activeTab!==1) && isAllowedTo(permission,["aprove"]) && (<Select
               defaultValue={row.status}
               style={{ width: 120 }}
               onChange={(value) => handleStatusUpdate(row, value)}
@@ -91,7 +94,7 @@ const Leave = () => {
               <Option value="pending">Pending</Option>
               <Option value="approved">Approved</Option>
               <Option value="rejected">Rejected</Option>
-            </Select>}
+            </Select>)}
         </div>
       ),
     },
@@ -111,6 +114,7 @@ const Leave = () => {
     return current && (current.isBefore(dayjs(), 'day') || current.isAfter(dayjs().add(7, 'day'), 'day'));
   };
 
+  const permission = useSelector((state)=>state.Permissions?.leave)
   const [fieldError, setFieldError] = useState(initialRequestError);
   const [requestFormData, setRequestFormData] = useState(initialRequestFromData);
   const [othersLeaveRequestData, setOthersLeaveRequestData] = useState([]);
@@ -228,17 +232,19 @@ const Leave = () => {
   }, []);
 
   return (
-    <div className="p-4">
+<>
+    {
+      isAllowedTo(permission,["view", "viewOwn"])? <div className="p-4">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Leaves</h2>
-        <button
+        {isAllowedTo(permission,["request"])&&<button
           onClick={() => {
             setIsRequestModelOpen(true);
           }}
           className="px-4 py-2 bg-orange-500 text-white rounded hover:bg-white hover:text-orange-600 hover:border border-orange-600 transition"
         >
           Request Leave
-        </button>
+        </button>}
       </div>
 
       <div className="mb-4">
@@ -405,7 +411,10 @@ const Leave = () => {
           </div>
         )}
       </Modal>
-    </div>
+    </div>:<UnauthorizedAccess/>
+    }
+
+    </>
   );
 };
 

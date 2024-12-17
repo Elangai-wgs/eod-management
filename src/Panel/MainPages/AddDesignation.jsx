@@ -137,6 +137,7 @@ import DataTable from "react-data-table-component";
 import { Modal, Form, Input, Button, Select } from "antd";
 import { CreateDepartment, CreateDesignation, GetDeparment } from "../../services";
 import { useEffect } from "react";
+import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
 
 const { Option } = Select;
 
@@ -159,18 +160,61 @@ const AddDesignation = () => {
       name: "ID",
       selector: (row) => row.id,
       sortable: true,
+      center: true,
     },
     {
       name: "Designation",
       selector: (row) => row.designation,
       sortable: true,
+      center:true,
     },
     {
       name: "Department",
       selector: (row) => row.department,
       sortable: true,
+      center: true,
+    },
+    {
+      name: "Actions",
+      center: true,
+      cell: (row) => (
+        <div className="flex justify-center items-center gap-2">
+          {/* View Icon */}
+          <button
+            onClick={() => handleView(row)}
+            className="text-blue-500 hover:text-blue-700"
+          >
+            <FaEye size={20}/>
+          </button>
+          {/* Edit Icon */}
+          <button
+            onClick={() => handleEdit(row)}
+            className="text-green-500 hover:text-green-700"
+          >
+            <FaEdit size={20}/>
+          </button>
+          {/* Delete Icon */}
+          <button
+            onClick={() => handleDelete(row)}
+            className="text-red-500 hover:text-red-700"
+          >
+            <FaTrash size={20}/>
+          </button>
+        </div>
+      ),
     },
   ];
+
+
+  const customStyles = {
+    headCells: {
+      style: {
+        backgroundColor: "#ff9800",
+        color: "#ffffff",
+        fontSize: "16px",
+      },
+    },
+  };
 
   // Handlers for button clicks
   const handleAddDepartment = () => {
@@ -238,22 +282,22 @@ const AddDesignation = () => {
         <div className="flex space-x-4">
           <button
             onClick={handleAddDepartment}
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300"
+            className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300"
           >
             Add Department
           </button>
           <button
             onClick={handleAddDesignation}
-            className="bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 transition duration-300"
+            className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600 transition duration-300"
           >
             Add Designation
           </button>
         </div>
       </div>
       <DataTable
-        title="Designation List"
         columns={columns}
         data={data}
+        customStyles={customStyles}
         pagination
         highlightOnHover
         responsive

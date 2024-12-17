@@ -13,10 +13,15 @@ import {
 import { AllStaffs, GetBatches, createSchedule, getSchedule } from "../../services";
 import { MdOutlinePauseCircleOutline } from "react-icons/md";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
+import { isAllowedTo } from "../../utils/utils";
+import { useSelector } from "react-redux";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const { Option } = Select;
 
 const Schedule = () => {
+  const permission = useSelector((state)=>state.Permissions?.shedule);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [batches, setBatches] = useState([]);
   const [staffs, setStaffs] = useState([]);
@@ -85,6 +90,7 @@ const Schedule = () => {
 
     fetchBatches();
     fetchStaffs();
+    console.log(permission,"schedule");
   }, []);
 
   useEffect(()=>{
@@ -106,10 +112,12 @@ fetchSchedule();
   
 
   return (
-    <div className="p-4">
-      <Button type="primary" onClick={handleOpenModal}>
+   <>
+   {
+    isAllowedTo(permission,["view","viewOwn"])?<div className="p-4">
+      {isAllowedTo(permission,["create"])&&<Button type="primary" onClick={handleOpenModal}>
         Add Schedule
-      </Button>
+      </Button>}
 
 
       <div className="grid grid-cols-1 gap-6">
@@ -122,7 +130,7 @@ fetchSchedule();
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-semibold text-primary">{item.batch}</h3>
               
-              <div className="flex space-x-3">
+            {isAllowedTo(permission,["manage"])&&(<>  <div className="flex space-x-3">
                 <FaEdit
                   className="text-blue-500 cursor-pointer"
                   onClick={() => handleEdit(item)}
@@ -132,6 +140,7 @@ fetchSchedule();
                   onClick={() => handleDelete(item._id)}
                 />
               </div>
+              </>)}
             </div>
               <p className="text-gray-500">
                 {new Date(item.date).toLocaleDateString()}
@@ -366,8 +375,11 @@ fetchSchedule();
           </Form.Item>
         </Form>
       </Modal>
-    </div>
-  );
+    </div>:<UnauthorizedAccess/>
+}
+</>
+
+    );
 };
 
 export default Schedule;

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
-import { FaTachometerAlt } from "react-icons/fa";
+import { FaBook, FaCalendarAlt, FaChartLine, FaClipboardList, FaClock, FaCog, FaComment, FaTachometerAlt, FaTasks, FaUser, FaUserTie, FaUsers, FaWallet } from "react-icons/fa";
 // import { Navbar } from "./Navbar";
 import logo from "../../assets/Login/NavbarLogo.png";
 import { useSelector } from "react-redux";
@@ -57,112 +57,129 @@ const CommonSideBar = () => {
       path: "/dashboard",
     },
     {
-      key: "batch",
-      icon: FaTachometerAlt,
-      label: "Batches",
-      path: "/batches",
+      key: "config",
+      icon: FaCog,
+      label: "Config",
+      path: "/config",
     },
     {
-      key: "basic-details",
-      icon: FaTachometerAlt,
-      label: "Basic Details",
-      path: "/basic-details",
-      nestedMenu: [
-        {
-          key: "roll",
-          icon: FaTachometerAlt,
-          label: "Add Roll",
-          path: "/add-roll",
-        },
-        {
-          key: "company",
-          icon: FaTachometerAlt,
-          label: "Add Company",
-          path: "/add-company",
-        },
-        {
-          key: "designation",
-          icon: FaTachometerAlt,
-          label: "Add Designation",
-          path: "/add-designation",
-        },
-      ],
+      key: "company",
+      icon: FaUsers,
+      label: "Company",
+      path: "/add-company",
     },
+
+    
+    {
+      key: "role",
+      icon: FaUserTie,
+      label: "Roll",
+      path: "/add-role",
+    },
+
+    {
+      key: "designation",
+      icon: FaTasks,
+      label: "Designation",
+      path: "/add-designation",
+    },
+
     {
       key: "staffs",
-      icon: FaTachometerAlt,
+      icon: FaUsers,
       label: "Staffs",
       path: "/staffs",
     },
+
+    {
+      key: "batch",
+      icon: FaClipboardList,
+      label: "Batches",
+      path: "/batches",
+    },
+   
+      
+      
+     
+   
     {
       key: "trainee",
-      icon: FaTachometerAlt,
+      icon: FaUserTie,
       label: "Trainee",
       path: "/trainee",
     },
     {
       key: "attendance",
-      icon: FaTachometerAlt,
+      icon: FaClock,
       label: "Attendance",
       path: "/attendance",
     },
     {
-      key: "task",
-      icon: FaTachometerAlt,
-      label: "Task",
-      path: "/task",
-    },
-    {
-      key: "assessment",
-      icon: FaTachometerAlt,
-      label: "Assessment",
-      path: "/assessment",
-    },
-    {
-      key: "eod",
-      icon: FaTachometerAlt,
-      label: "EOD",
-      path: "/eod",
-    },
-    {
-      key: "syllabus",
-      icon: FaTachometerAlt,
-      label: "Syllabus",
-      path: "/syllabus",
-    },
-    {
       key: "leave",
-      icon: FaTachometerAlt,
+      icon: FaCalendarAlt,
       label: "Leave Request",
       path: "/leave",
     },
     {
-      key: "config",
-      icon: FaTachometerAlt,
-      label: "Config",
-      path: "/config",
-    },
-    {
-      key: "payroll",
-      icon: FaTachometerAlt,
-      label: "Payroll",
-      path: "/payroll",
-    },
-    {
       key: "schedule",
-      icon: FaTachometerAlt,
+      icon: FaCalendarAlt,
       label: "Schedule",
       path: "/schedule",
     },
     {
+      key: "assessment",
+      icon: FaBook,
+      label: "Assessment",
+      path: "/assessment",
+    },
+    {
+      key: "task",
+      icon: FaTasks,
+      label: "Task",
+      path: "/task",
+    },
+ 
+    {
+      key: "eod",
+      icon: FaClipboardList,
+      label: "EOD",
+      path: "/eod",
+    },
+  
+    {
+      key: "payroll",
+      icon: FaWallet,
+      label: "Payroll",
+      path: "/payroll",
+    },
+
+    {
+      key: "monthlyPayroll",
+      icon: FaWallet,
+      label: "MonthlyPayroll",
+      path: "/monthly-payroll",
+    },
+  
+    {
+      key: "syllabus",
+      icon: FaBook,
+      label: "Syllabus",
+      path: "/syllabus",
+    },
+   
+   
+  
+
+    
+    {
       key: "chat",
-      icon: FaTachometerAlt,
+      icon: FaComment,
       label: "Chat",
       path: "/chat",
     },
     {
       key: "report",
-      icon: FaTachometerAlt,
+      icon: FaChartLine,
       label: "Report",
       path: "/report",
     },
@@ -182,14 +199,18 @@ const CommonSideBar = () => {
       >
         <div className="flex flex-col items-center w-full">
           <img src={logo} alt="" className="w-16" />
-          <h2 className="text-2xl font-semibold mb-8 text-center">
+          <h2 className="text-xl font-semibold mb-8 text-center">
             Why Global Services
           </h2>
         </div>
-        {allowedSidebarMenus.map((sidebarMenuData) =>
-          generateMenu(sidebarMenuData)
-        )}
+        <div className="w-full">
+    {allowedSidebarMenus.map((sidebarMenuData) => (
+      <div key={sidebarMenuData.id} className="mb-3">
+        {generateMenu(sidebarMenuData)}
       </div>
+    ))}
+  </div>
+    </div>
     </div>
   );
 };

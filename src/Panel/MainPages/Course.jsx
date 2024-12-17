@@ -9,11 +9,15 @@ import {
   GetSyllabus,
 } from "../../services";
 import { FaEdit, FaEye, FaTrash } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import { isAllowedTo } from "../../utils/utils";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const { Option } = Select;
 const { TextArea } = Input;
 
 const Course = () => {
+  const permission= useSelector((state)=>state.Permissions?.syllabus)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen]=useState(false); 
   const [selectedCourse, setSelectedCourse] = useState(null);
@@ -210,10 +214,13 @@ const Course = () => {
           <button className="border border-green-500 text-green-500 px-2 py-2 rounded-md hover:border-green-600" onClick={()=>viewModal(row)}>
             <FaEye />
           </button>
+          {isAllowedTo(permission,["manage"])&&(
+          <>
           <button
             onClick={() => handleEditClick(row)}
             className="border border-blue-500 text-blue-500 px-2 py-2 rounded-md hover:border-blue-600"
           >
+          
             <FaEdit />
           </button>
           <button
@@ -222,6 +229,8 @@ const Course = () => {
           >
             <FaTrash />
           </button>
+          </>
+         )}
         </div>
       ),
     },
@@ -243,13 +252,15 @@ const Course = () => {
   }, []);
 
   return (
-    <div className="p-4">
+   <>
+   {
+isAllowedTo(permission,["view","viewOwn"])? <div className="p-4">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold">Syllabus Management</h2>
-        <button className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md" onClick={showModal}>
+        {isAllowedTo(permission,["create"])&&<button className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded-md" onClick={showModal}>
           Add Syllabus
-        </button>
+        </button>}
       </div>
 
       {/* DataTable to Display Syllabus */}
@@ -491,7 +502,9 @@ const Course = () => {
           </Form.Item>
         </Form>
       </Modal>
-    </div>
+    </div>:<UnauthorizedAccess/>
+ } 
+</>
   );
 };
 

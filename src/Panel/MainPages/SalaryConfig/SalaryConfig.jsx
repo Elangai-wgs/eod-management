@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { GetConfig, UpdateConfig } from "../../../services";
+import { isAllowedTo } from "../../../utils/utils";
+import { useSelector } from "react-redux";
 
 const InputField = ({
   label,
@@ -49,6 +51,7 @@ function hhmmToSeconds(timeStr) {
 }
 
 const SalaryConfig = () => {
+  const permission= useSelector((state)=>state.Permissions?.config)
   const [config, setConfig] = useState({});
   const [backupConfig, setBackupConfig] = useState({});
   const [historyList, setHistoryList] = useState([]);
@@ -364,8 +367,10 @@ const SalaryConfig = () => {
       {/* Sticky Sidebar */}
       <div className="w-1/4 p-6 bg-gray-50 sticky top-0 h-screen border-r border-gray-200">
         <h3 className="text-xl font-semibold text-gray-800">Actions</h3>
-        <div className="flex items-center gap-2">
-          <div
+        
+          {isAllowedTo(permission,["manage"])&&(
+          <div className="flex items-center gap-2">
+            <div
             onClick={handleEditClick}
             className={`text-center cursor-pointer mt-6 py-3 flex-1 text-white font-semibold rounded-lg transition-all ease-in-out ${
               isEdit
@@ -383,7 +388,10 @@ const SalaryConfig = () => {
               Cancel Edit
             </div>
           )}
+        
         </div>
+          )}
+
         <div className="mt-12 h-[80%]">
           <h3 className="text-xl font-semibold text-gray-800 mb-4 h-[3%]">History</h3>
           {historyList.length > 0 ? (

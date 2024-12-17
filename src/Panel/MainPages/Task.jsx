@@ -9,13 +9,16 @@ import { FaEdit } from 'react-icons/fa';
 import { useDispatch } from 'react-redux';
 import { setProjectId, setProjectTitle} from '../../Redux/TrainerRedux';
 import { store } from '../../Redux/Store';
+import { useSelector } from 'react-redux';
+import { isAllowedTo } from '../../utils/utils';
+import UnauthorizedAccess from '../../components/UnauthorizedAccess';
 
 const Task = () => {
 
   const projectInitialState = {
     projectName:""
   };
-
+  const permission= useSelector((state)=>state.Permissions?.task)
   const[isModalVisible, setIsModalVisible]=useState(false);//project modal
   const[isEditModalVisible, setIsEditModalVisible]=useState(false);//project modal
   const[projectName, setProjectName]=useState(projectInitialState);
@@ -169,6 +172,8 @@ const handleDeleteCancel = () => {
 
   return (
     <>
+    {
+      isAllowedTo(permission,["view","viewOwn"])?
     <div>
      {projectData.length >0 ?(
       <>
@@ -207,7 +212,7 @@ const handleDeleteCancel = () => {
          </li>
           ))}
         </ul>
-      </div>
+       </div>
       
       </div>
       
@@ -298,7 +303,8 @@ const handleDeleteCancel = () => {
     >
       <p>Are you sure to delete the project?</p>
     </Modal> */}
-    </div>
+    </div>:<UnauthorizedAccess/>
+    }
 
     </>
   )

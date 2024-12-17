@@ -10,8 +10,12 @@ import {
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { Popover, Checkbox } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
+import { isAllowedTo } from "../../utils/utils";
+import { useSelector } from "react-redux";
+import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 
 const AddRole = () => {
+  const permission= useSelector((state)=>state.Permissions?.role);
   const [roles, setRoles] = useState([]);
   const [permissionGroups, setPermissionGroups] = useState({});
   const [isAddRoleModalOpen, setIsAddRoleModalOpen] = useState(false);
@@ -475,9 +479,13 @@ const AddRole = () => {
   );
 
   return (
-    <div className="p-4">
+   <> 
+   {
+    isAllowedTo(permission,["view","viewOwn"])?
+   
+   <div className="p-4">
       {/* Add Role Button */}
-      <button
+     {isAllowedTo(permission,["create"])} <button
         className="bg-orange-500 text-white px-4 py-2 rounded shadow hover:bg-orange-600 transition"
         onClick={handleAddRoleClick}
       >
@@ -733,7 +741,9 @@ const AddRole = () => {
           </div>
         </Form>
       </Modal>
-    </div>
+    </div>:<UnauthorizedAccess/>
+}
+</>
   );
 };
 
