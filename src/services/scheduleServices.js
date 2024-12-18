@@ -138,7 +138,6 @@ exports.getScheduleId = async(req)=>{
 
 }
 
-
 exports.editSchedule = async(req)=>{
     const { _id } = req.params;
 
@@ -163,7 +162,6 @@ exports.editSchedule = async(req)=>{
     return updateSchedule;
 
 }
-
 
 exports.deleteSchedule = async(req)=>{
     const { _id } = req.params;

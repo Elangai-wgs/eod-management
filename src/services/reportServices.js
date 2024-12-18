@@ -11,8 +11,6 @@ exports.createReport = async(req)=>{
 
     const reportedToUser = await Auth.findOne({accountId:reportTo});
     const reporter = await Auth.findOne({accountId});
-    console.log(reportedToUser,"zzzzz");
-    console.log(reporter,"lallalla");
     
     if (!reportedToUser) {
         throw new ApiError(httpStatus.BAD_REQUEST, "The user you're reporting to does not exist.");
@@ -74,7 +72,6 @@ exports.editReport = async(req)=>{
     return updateReport;
 }
 
-
 exports.deleteReport = async(req)=>{
     const { _id } = req.params
     if (!_id) {
@@ -90,7 +87,6 @@ exports.deleteReport = async(req)=>{
 
     await ReportModel.findByIdAndDelete(_id);
 }
-
 
 exports.replayReport = async(req)=>{
     const { _id } = req.params;

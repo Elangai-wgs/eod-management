@@ -32,7 +32,8 @@ exports.getAllDepartments = async (req)=>{
 exports.updateDepartment = async (req)=>{
     const {...dataToUpdate} = req.body;
     const {department_id} = req.params;
-    const updatedDepartment = await DepartmentModel.findByIdAndUpdate(department_id,dataToUpdate);
+    const updatedDepartment = await DepartmentModel.findByIdAndUpdate(department_id,
+        dataToUpdate,{new:true});
 
     if(!updatedDepartment){
         throw new ApiError(status.INTERNAL_SERVER_ERROR, "Failed to update department");
