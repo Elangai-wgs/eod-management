@@ -29,7 +29,7 @@ exports.getAllRoles = async (req)=>{
     const {p} = req.query;
     let roles = await RoleModel.find({active:true});
 
-    if(roles.length<=1){
+    if(roles.length<1){
         throw new ApiError(status.NOT_FOUND,'No roles found');
     }
 
