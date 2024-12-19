@@ -101,7 +101,10 @@ const RoleSchema = mongoose.Schema({
       type:Array,
       default:[]
    },
-
+   dashboard: {
+      type:Array,
+      default:[]
+   },
   },{timestamp:true,collection:"Role"});
 
   const RoleModel = mongoose.model('Role',RoleSchema);

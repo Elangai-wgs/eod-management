@@ -1,7 +1,7 @@
 const { default: status } = require("http-status");
 const ApiError = require("../utils/apiError");
 const { RoleModel } = require("../models/role.model");
-const { allPermissions, permissionGroups } = require("../config/permissions");
+const { allPermissions, permissionGroups, permissionsConfig } = require("../config/permissions");
 
 exports.createRole = async(req)=>{
     const {roleName,hierarchyLevel} = req.body;
@@ -29,12 +29,12 @@ exports.getAllRoles = async (req)=>{
     const {p} = req.query;
     let roles = await RoleModel.find({active:true});
 
-    if(roles.length<1){
-        throw new ApiError(status.NOT_FOUND,'No roles found');
-    }
+    // if(roles.length<1){
+    //     throw new ApiError(status.NOT_FOUND,'No roles found');
+    // }
 
     if(p){
-        return {roles,permissions:allPermissions, permissionGroups}
+        return {roles,permissions:allPermissions, permissionsConfig}
     }
 
     return roles;
