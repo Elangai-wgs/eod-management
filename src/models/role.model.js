@@ -49,10 +49,6 @@ const RoleSchema = mongoose.Schema({
     type:Array,
     default:[]
    },
-   config:{
-    type:Array,
-    default:[]
-   },
    isArchive:{
     type:Boolean,
     default:false
@@ -69,7 +65,7 @@ const RoleSchema = mongoose.Schema({
     type:Array,
     default:[]
    },
-   config:{
+   system:{
     type:Array,
     default:[]
    },
