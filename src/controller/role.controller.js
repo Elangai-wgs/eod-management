@@ -15,5 +15,5 @@ exports.updateRole = catchAsync(async(req, res)=>{
 })
 exports.deleteRole = catchAsync(async(req, res)=>{
     const response = await RoleServices.deleteRole(req);
-    res.status(200).json({success: true, message:"Role deleted Successfully", data:response});
+    res.status(200).json({success: true, message:"Role deleted Successfully",});
 })

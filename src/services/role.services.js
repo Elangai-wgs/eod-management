@@ -29,7 +29,7 @@ exports.getAllRoles = async (req)=>{
     const {p} = req.query;
     let roles = await RoleModel.find({active:true});
 
-    if(roles.length<1){
+    if(roles.length<=1){
         throw new ApiError(status.NOT_FOUND,'No roles found');
     }
 
@@ -73,7 +73,7 @@ exports.deleteRole = async (req)=>{
         throw new ApiError(status.NOT_FOUND,'Role not found');
     }
 
-    const deletedRole = await RoleModel.findByIdAndUpdate(role_id,{active:false,isArchive:true},{new:true});
+    const deletedRole = await RoleModel.findByIdAndDelete(role_id);
 
     if(!deletedRole){
         throw new ApiError(status.INTERNAL_SERVER_ERROR,'Failed to delete role');
