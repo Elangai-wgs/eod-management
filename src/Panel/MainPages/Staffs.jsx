@@ -1,37 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { IoMdAdd } from "react-icons/io";
 import { FiEdit, FiEye, FiTrash } from "react-icons/fi";
-import {
-  Modal,
-  Form,
-  Input,
-  Select,
-  Button,
-  DatePicker,
-  Upload,
-  message,
-} from "antd";
+import { Modal,Form, Input, Select,  Button,  DatePicker,  Upload,  message,} from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import {
-  AddStaffs,
-  AllStaffs,
-  DeleteStaffs,
-  EditStaffs,
-  GetCompany,
-  GetDeparment,
-  GetDesignation,
-  GetRole,
-} from "../../services";
+import {  AddStaffs,AllStaffs,DeleteStaffs, EditStaffs,GetCompany,GetDeparment,GetDesignation,GetRole,} from "../../services";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import { isAllowedTo } from "../../utils/utils";
 import UnauthorizedAccess from "../../components/UnauthorizedAccess";
-
 const { Option } = Select;
-
 const Staffs = () => {
   const permission = useSelector((state)=>state.Permissions?.staffs);
-
   const [searchQuery, setSearchQuery] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
@@ -54,7 +33,6 @@ const Staffs = () => {
     doj: "",
     company_id: "",
     fullName: "",
-
     gender: "",
     phoneNumber: "",
     address: "",
@@ -69,7 +47,6 @@ const Staffs = () => {
     profilePic: "",
     isTrainer: false,
   });
-  console.log(selectedStaff);
 
   useEffect(() => {
     const fetchStaffData = () => {
@@ -101,6 +78,7 @@ console.log(permission,"permi");
         });
     };
 
+    
     fetchCompany();
   }, []);
 

@@ -10,12 +10,13 @@ import {
   message,
 } from "antd";
 
-import { AllStaffs, GetBatches, createSchedule, getSchedule } from "../../services";
+import { AllStaffs, EditSchedule, GetBatches, createSchedule, getSchedule } from "../../services";
 import { MdOutlinePauseCircleOutline } from "react-icons/md";
 import { FaEdit, FaPlus, FaTrash } from "react-icons/fa";
 import { isAllowedTo } from "../../utils/utils";
 import { useSelector } from "react-redux";
 import UnauthorizedAccess from "../../components/UnauthorizedAccess";
+import moment from "moment";
 
 const { Option } = Select;
 
@@ -26,13 +27,43 @@ const Schedule = () => {
   const [batches, setBatches] = useState([]);
   const [staffs, setStaffs] = useState([]);
   const[schedule,setSchedule] = useState([]);
+  const[editMode, setEditMode] = useState(false);
+  const[currentItem,setCurrentItem]=useState(null)
   const [form] = Form.useForm();
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
+ 
+  const handleOpenModal = () => {
+    setEditMode(false); // Default to add mode
+    form.resetFields();
+    setIsModalOpen(true);
+  };
 
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setCurrentItem(null); // Clear current item
+  };
+
+  const handleEdit = (item) => {
+    setEditMode(true); // Switch to edit mode
+    setCurrentItem(item);
+    setIsModalOpen(true);
+
+
+    form.setFieldsValue({
+      batch: item._id,
+      date: item.date && moment(item.date), // Convert to moment object
+      timeTable: item.details.map((detail) => ({
+        trainer: detail.trainer,
+        startTime: moment(detail.startTime, "HH:mm"),
+        endTime: moment(detail.endTime, "HH:mm"),
+        subject: detail.subject,
+      })),
+    });
+  };
+
+
+  
   const handleSubmit = async (values) => {
-    console.log("Form Values:", values);
     if (!values.batch || !values.date || !values.timeTable) {
       message.error("Please ensure all required fields are filled!");
       return;
@@ -49,21 +80,32 @@ const Schedule = () => {
       })),
     };
 
-    console.log("Payload:", payload);
-
     try {
-      const response = await createSchedule(payload);
-
-      if (response.status === 200) {
-        message.success("Schedule added successfully!");
-        form.resetFields();
-        handleCloseModal();
+      let response;
+      if (editMode && currentItem) {
+        // Update existing schedule
+        response = await EditSchedule(currentItem._id, payload); // Replace with your API call
+        if (response.status === 200) {
+          message.success("Schedule updated successfully!");
+        } else {
+          message.error("Failed to update schedule. Please try again.");
+        }
       } else {
-        message.error("Failed to add schedule. Please try again.");
+        // Create new schedule
+        response = await createSchedule(payload);
+        if (response.status === 200) {
+          message.success("Schedule added successfully!");
+        } else {
+          message.error("Failed to add schedule. Please try again.");
+        }
       }
+
+      form.resetFields();
+      handleCloseModal();
+      // Refresh schedules
     } catch (error) {
       console.error("Error:", error);
-      message.error("Failed to add schedule. Please try again.");
+      message.error("Failed to save schedule. Please try again.");
     }
   };
 
@@ -201,7 +243,7 @@ fetchSchedule();
 
 
       <Modal
-        title="Add Schedule"
+        title={editMode ? "Edit Schedule" : "Add Schedule"}
         visible={isModalOpen}
         onCancel={handleCloseModal}
         footer={null}
@@ -290,12 +332,12 @@ fetchSchedule();
                         label="Trainer"
                         name={[name, "trainer"]}
                         fieldKey={[fieldKey, "trainer"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a trainer!",
-                          },
-                        ]}
+                        // rules={[
+                        //   {
+                        //     required: true,
+                        //     message: "Please select a trainer!",
+                        //   },
+                        // ]}
                       >
                         <Select placeholder="Select trainer">
                           {staffs.map((trainer) => (
@@ -370,7 +412,7 @@ fetchSchedule();
 
           <Form.Item>
             <Button type="primary" htmlType="submit" className="w-full">
-              Add Schedule
+            {editMode ? "Update Schedule" : "Add Schedule"}
             </Button>
           </Form.Item>
         </Form>
@@ -383,3 +425,155 @@ fetchSchedule();
 };
 
 export default Schedule;
+
+
+// import React, { useState } from "react";
+// import { Form, Modal, Button, Input, DatePicker, TimePicker, Table } from "antd";
+// import moment from "moment";
+
+// const App = () => {
+//   const [form] = Form.useForm();
+//   const [editMode, setEditMode] = useState(false);
+//   const [currentItem, setCurrentItem] = useState(null);
+//   const [isModalOpen, setIsModalOpen] = useState(false);
+
+//   const data = [
+//     {
+//       id: 1,
+//       batch: "Batch A",
+//       date: "2024-12-18",
+//       details: [
+//         {
+//           trainer: "John Doe",
+//           startTime: "10:00",
+//           endTime: "12:00",
+//           subject: "Mathematics",
+//         },
+//       ],
+//     },
+//   ];
+
+//   const handleEdit = (item) => {
+//     setEditMode(true);
+//     setCurrentItem(item);
+//     setIsModalOpen(true);
+
+//     form.setFieldsValue({
+//       batch: item.batch,
+//       date: item.date && moment(item.date), // Convert to moment object
+//       timeTable: item.details.map((detail) => ({
+//         trainer: detail.trainer,
+//         startTime: moment(detail.startTime, "HH:mm"),
+//         endTime: moment(detail.endTime, "HH:mm"),
+//         subject: detail.subject,
+//       })),
+//     });
+//   };
+
+//   const handleSave = () => {
+//     form.validateFields().then((values) => {
+//       console.log("Form values:", values);
+//       setIsModalOpen(false);
+//       form.resetFields();
+//       setEditMode(false);
+//     });
+//   };
+
+//   const columns = [
+//     { title: "Batch", dataIndex: "batch", key: "batch" },
+//     { title: "Date", dataIndex: "date", key: "date" },
+//     {
+//       title: "Actions",
+//       key: "actions",
+//       render: (_, record) => (
+//         <Button onClick={() => handleEdit(record)}>Edit</Button>
+//       ),
+//     },
+//   ];
+
+//   return (
+//     <div>
+//       <Table dataSource={data} columns={columns} rowKey="id" />
+//       <Modal
+//         title={editMode ? "Edit Schedule" : "Add Schedule"}
+//         visible={isModalOpen}
+//         onCancel={() => setIsModalOpen(false)}
+//         footer={[
+//           <Button key="cancel" onClick={() => setIsModalOpen(false)}>
+//             Cancel
+//           </Button>,
+//           <Button key="save" type="primary" onClick={handleSave}>
+//             Save
+//           </Button>,
+//         ]}
+//       >
+//         <Form form={form} layout="vertical">
+//           <Form.Item
+//             label="Batch"
+//             name="batch"
+//             rules={[{ required: true, message: "Please enter batch name!" }]}
+//           >
+//             <Input />
+//           </Form.Item>
+//           <Form.Item
+//             label="Date"
+//             name="date"
+//             rules={[{ required: true, message: "Please select a date!" }]}
+//           >
+//             <DatePicker />
+//           </Form.Item>
+//           <Form.List name="timeTable">
+//             {(fields, { add, remove }) => (
+//               <>
+//                 {fields.map(({ key, name, fieldKey }) => (
+//                   <div key={key} style={{ marginBottom: "12px" }}>
+//                     <Form.Item
+//                       label="Trainer"
+//                       name={[name, "trainer"]}
+//                       fieldKey={[fieldKey, "trainer"]}
+//                       rules={[{ required: true, message: "Enter trainer name" }]}
+//                     >
+//                       <Input />
+//                     </Form.Item>
+//                     <Form.Item
+//                       label="Start Time"
+//                       name={[name, "startTime"]}
+//                       fieldKey={[fieldKey, "startTime"]}
+//                       rules={[{ required: true, message: "Enter start time" }]}
+//                     >
+//                       <TimePicker format="HH:mm" />
+//                     </Form.Item>
+//                     <Form.Item
+//                       label="End Time"
+//                       name={[name, "endTime"]}
+//                       fieldKey={[fieldKey, "endTime"]}
+//                       rules={[{ required: true, message: "Enter end time" }]}
+//                     >
+//                       <TimePicker format="HH:mm" />
+//                     </Form.Item>
+//                     <Form.Item
+//                       label="Subject"
+//                       name={[name, "subject"]}
+//                       fieldKey={[fieldKey, "subject"]}
+//                       rules={[{ required: true, message: "Enter subject" }]}
+//                     >
+//                       <Input />
+//                     </Form.Item>
+//                     <Button type="link" onClick={() => remove(name)}>
+//                       Remove
+//                     </Button>
+//                   </div>
+//                 ))}
+//                 <Button type="dashed" onClick={() => add()}>
+//                   Add Schedule
+//                 </Button>
+//               </>
+//             )}
+//           </Form.List>
+//         </Form>
+//       </Modal>
+//     </div>
+//   );
+// };
+
+// export default App;

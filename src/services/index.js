@@ -311,6 +311,11 @@ export const getSchedule = async ()=>{
   return res;
 }
 
+export const EditSchedule = async (id, data)=>{
+  const res = await interceptors.put(`/schedule/editSchedule/${id}`,data)
+  return res;
+}
+
 
 //EOD
 

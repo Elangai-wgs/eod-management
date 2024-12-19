@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import DataTable from "react-data-table-component";
 import { Modal, Form, Input, Button, Select, message } from "antd";
-import {
-  CreateRole,
-  DeleteRole,
-  GetRole,
-  UpdateRole,
-} from "../../services";
+import {  CreateRole,  DeleteRole,  GetRole,  UpdateRole,} from "../../services";
 import { FaEdit, FaEye, FaTrashAlt } from "react-icons/fa";
 import { Popover, Checkbox } from "antd";
 import { InfoCircleOutlined } from "@ant-design/icons";
