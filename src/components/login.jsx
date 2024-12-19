@@ -14,7 +14,7 @@ const Login = () => {
   // const {permission,setPermission} = useContext(PermissionContext)
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [authorityLevel, setAuthorityLevel] = useState("");
+  // const [authorityLevel, setAuthorityLevel] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
@@ -27,7 +27,7 @@ const Login = () => {
         const loginData = {
           email,
           password,
-          authorityLevel,
+          // authorityLevel,
           latitude,
           longitude,
         };
@@ -41,12 +41,12 @@ const Login = () => {
             if (response.data.status === true) {
 
               localStorage.setItem("authToken", response.data.data.token);
-              const authorityLevel = response.data.data?.role.authorityLevel;
+              // const authorityLevel = response.data.data?.role.authorityLevel;
               // setPermission(response.data.data?.role)
               setEmail("");
               setPassword("");
               // setAuthorityLevel(authorityLevel);
-              console.log("User Role:", authorityLevel);
+              // console.log("User Role:", authorityLevel);
               navigate('/dashboard');
               dispatch(setPermission(response.data.data?.role))
               // Navigate based on authority level
