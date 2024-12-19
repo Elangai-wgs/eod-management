@@ -12,203 +12,13 @@ import UnauthorizedAccess from "../../components/UnauthorizedAccess";
 const AddRole = () => {
   const permission= useSelector((state)=>state.Permissions?.role);
   const [roles, setRoles] = useState([]);
-  const [permissionGroups, setPermissionGroups] = useState({});
   const [isAddRoleModalOpen, setIsAddRoleModalOpen] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedRole, setSelectedRole] = useState(null);
   const [form] = Form.useForm();
-  const initialState = {
-    roleName: "",
-    admin: {
-      title: "Admin Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    company: {
-      title: "company Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "View", value: "view" },
-      ],
-      GrantedPermission: [],
-    },
-    staffs: {
-      title: "Employee Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    attendance: {
-      title: "Attendance Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    eod: {
-      title: "EOD Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    assessment: {
-      title: "Assessment Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    batch: {
-      title: "Batch Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    task: {
-      title: "Task Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    trainee: {
-      title: "Trainee Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    schedule: {
-      title: "Schedule Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    syllabus: {
-      title: "Syllabus Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "Manage Own", value: "manageOwn" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    leave: {
-      title: "Leave Management",
-      checkBoxs: [
-        { title: "Request", value: "request" },
-        { title: "Approve", value: "approve" },
-        { title: "Manage", value: "manage" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    payroll: {
-      title: "Payroll Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    monthlyPayroll: {
-      title: "Monthly Payroll Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "View", value: "view" },
-      ],
-      GrantedPermission: [],
-    },
-    report: {
-      title: "Report Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "View", value: "view" },
-        { title: "View Own", value: "viewOwn" },
-      ],
-      GrantedPermission: [],
-    },
-    system: {
-      title: "System Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "View", value: "view" },
-      ],
-      GrantedPermission: [],
-    },
-
-    role: {
-      title: "Role Management",
-      checkBoxs: [
-        { title: "Create", value: "create" },
-        { title: "Manage", value: "manage" },
-        { title: "View", value: "view" },
-      ],
-      GrantedPermission: [],
-    },
-    authorityLevel: {
-      title: "Authority Level",
-      checkBoxs: [
-        { title: "High", value: "High" },
-        { title: "Medium", value: "Medium" },
-        { title: "Low", value: "Low" },
-      ],
-      GrantedPermission: [],
-    },
-  };
+  const [initialState, setInitialState] = useState({})
   const [postRoles, SetPostRoles] = useState(initialState);
 
   const fetchRoles = async () => {
@@ -216,7 +26,15 @@ const AddRole = () => {
       const response = await GetRole();
       if (response.status === 200) {
         console.log(response.data.data);
-        setRoles(response.data.data);
+        setRoles(response.data.data.roles);
+        setInitialState({
+          roleName: "",
+          ...response.data.data.permissionsConfig
+        })
+        SetPostRoles({
+          roleName: "",
+          ...response.data.data.permissionsConfig
+        })
       } else {
         message.error("Failed to load roles.");
       }
